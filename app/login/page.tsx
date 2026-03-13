@@ -4,6 +4,22 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authApi } from "@/lib/api";
 
+interface AuthResult {
+  user: { id: string; email: string; name: string; role: string };
+  accessToken: string;
+}
+
+function redirectByRole(role: string): string {
+  switch (role) {
+    case "admin":
+      return "/admin/dashboard";
+    case "client":
+      return "/client/dashboard";
+    default:
+      return "/user/dashboard";
+  }
+}
+
 export default function LoginPage() {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
@@ -14,12 +30,9 @@ export default function LoginPage() {
     email: "",
     password: "",
     name: "",
-    role: "user",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
     setError("");
   };
@@ -30,17 +43,17 @@ export default function LoginPage() {
     setError("");
 
     try {
+      let result: AuthResult;
       if (isLogin) {
-        await authApi.login(form.email, form.password);
+        result = (await authApi.login(form.email, form.password)) as AuthResult;
       } else {
-        await authApi.register({
+        result = (await authApi.register({
           email: form.email,
           password: form.password,
           name: form.name,
-          role: form.role,
-        });
+        })) as AuthResult;
       }
-      router.push("/dashboard");
+      router.push(redirectByRole(result.user.role));
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -120,24 +133,6 @@ export default function LoginPage() {
                 </p>
               )}
             </div>
-
-            {!isLogin && (
-              <div>
-                <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                  Role
-                </label>
-                <select
-                  name="role"
-                  value={form.role}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
-                >
-                  <option value="user">User</option>
-                  <option value="client">Client</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
-            )}
 
             <button
               type="submit"
