@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { authApi } from "@/lib/api";
+import { authApi, setAccessToken } from "@/lib/api";
 
 interface AuthResult {
   user: { id: string; email: string; name: string; role: string };
@@ -60,6 +60,7 @@ export default function LoginPage() {
           name: form.name,
         })) as AuthResult;
       }
+      setAccessToken(result.accessToken);
       router.push(redirectByRole(result.user.role));
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");

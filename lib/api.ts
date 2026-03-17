@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://fantaapi.netlify.app/api";
+const API_URL =  "https://fantaapi.netlify.app/api";
 
 interface ApiOptions {
   method?: string;
@@ -8,13 +8,28 @@ interface ApiOptions {
 
 let isRefreshing = false;
 
+function getAccessToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("access_token");
+}
+
+export function setAccessToken(token: string) {
+  localStorage.setItem("access_token", token);
+}
+
+export function clearAccessToken() {
+  localStorage.removeItem("access_token");
+}
+
 async function rawFetch(endpoint: string, options: ApiOptions = {}) {
   const { method = "GET", body, headers = {} } = options;
+  const token = getAccessToken();
 
   return fetch(`${API_URL}${endpoint}`, {
     method,
     headers: {
       "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
     credentials: "include",
@@ -39,6 +54,10 @@ export async function api<T = unknown>(
     try {
       const refreshRes = await rawFetch("/auth/refresh", { method: "POST" });
       if (refreshRes.ok) {
+        const refreshData = await refreshRes.json();
+        if (refreshData.accessToken) {
+          setAccessToken(refreshData.accessToken);
+        }
         res = await rawFetch(endpoint, options);
       }
     } finally {
@@ -74,12 +93,15 @@ export async function apiUpload<T = unknown>(
   endpoint: string,
   formData: FormData
 ): Promise<T> {
-  const doFetch = () =>
-    fetch(`${API_URL}${endpoint}`, {
+  const doFetch = () => {
+    const token = getAccessToken();
+    return fetch(`${API_URL}${endpoint}`, {
       method: "POST",
       credentials: "include",
+      ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
       body: formData,
     });
+  };
 
   let res = await doFetch();
 
@@ -88,6 +110,10 @@ export async function apiUpload<T = unknown>(
     try {
       const refreshRes = await rawFetch("/auth/refresh", { method: "POST" });
       if (refreshRes.ok) {
+        const refreshData = await refreshRes.json();
+        if (refreshData.accessToken) {
+          setAccessToken(refreshData.accessToken);
+        }
         res = await doFetch();
       }
     } finally {

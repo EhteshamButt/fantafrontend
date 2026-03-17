@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { authApi, paymentApi } from "@/lib/api";
+import { authApi, paymentApi, clearAccessToken } from "@/lib/api";
 
 interface User {
   id: string;
@@ -69,7 +69,7 @@ export default function UserDashboard() {
   }, [router]);
 
   const handleLogout = async () => {
-    try { await authApi.logout(); } finally { router.push("/login"); }
+    try { await authApi.logout(); } finally { clearAccessToken(); router.push("/login"); }
   };
 
   const handleSelectPackage = (pkg: Package) => {

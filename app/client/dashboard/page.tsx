@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { authApi } from "@/lib/api";
+import { authApi, clearAccessToken } from "@/lib/api";
 import { useClientUser } from "../layout";
 
 const actionCards = [
@@ -106,7 +106,7 @@ export default function ClientDashboard() {
   const [copied, setCopied] = useState(false);
 
   const handleLogout = async () => {
-    try { await authApi.logout(); } finally { router.push("/login"); }
+    try { await authApi.logout(); } finally { clearAccessToken(); router.push("/login"); }
   };
 
   const handleCopyReferLink = async () => {
