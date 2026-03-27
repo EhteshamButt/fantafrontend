@@ -1,4 +1,4 @@
-const API_URL =  "https://fantaapi.netlify.app/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://fantaapi.netlify.app/api";
 
 interface ApiOptions {
   method?: string;
@@ -221,6 +221,29 @@ export const adminApi = {
 
   updateWithdrawalStatus: (id: string, status: string) =>
     api(`/withdrawals/${id}/status`, { method: "PATCH", body: { status } }),
+};
+
+export interface ReferralSettingRecord {
+  id: string;
+  type: "deposit_commission" | "plan_subscription" | "ptc_view";
+  enabled: boolean;
+  levels: { level: number; percentage: number }[];
+}
+
+export const referralSettingsApi = {
+  getAll: () => api<ReferralSettingRecord[]>("/referral-settings"),
+
+  updateLevels: (type: string, levels: { level: number; percentage: number }[]) =>
+    api<ReferralSettingRecord>(`/referral-settings/${type}/levels`, {
+      method: "PATCH",
+      body: { levels },
+    }),
+
+  toggle: (type: string, enabled: boolean) =>
+    api<ReferralSettingRecord>(`/referral-settings/${type}/toggle`, {
+      method: "PATCH",
+      body: { enabled },
+    }),
 };
 
 export const withdrawalApi = {
