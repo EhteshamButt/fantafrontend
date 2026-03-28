@@ -35,7 +35,7 @@ export default function WithdrawalRequestsPage() {
     setActionId(id);
     try {
       await adminApi.updateWithdrawalStatus(id, status);
-      setWithdrawals((prev) => prev.filter((w) => w._id !== id));
+      setWithdrawals((prev) => prev.filter((w) => w.id !== id));
     } catch (err) {
       console.error(err);
       alert("Failed to update withdrawal status");
@@ -90,7 +90,7 @@ export default function WithdrawalRequestsPage() {
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {withdrawals.map((w) => (
-                  <tr key={w._id} className="transition-colors hover:bg-gray-50">
+                  <tr key={w.id} className="transition-colors hover:bg-gray-50">
                     <td className="px-4 py-3">
                       <p className="font-semibold text-blue-600">{formatMethod(w.method)}</p>
                       <p className="font-mono text-xs text-gray-500">{w.trxId}</p>
@@ -109,7 +109,7 @@ export default function WithdrawalRequestsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <p className="font-medium text-blue-600">
-                        @{w.userId?.name || "unknown"}
+                        @{w.user?.name || "unknown"}
                       </p>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3">
@@ -134,18 +134,18 @@ export default function WithdrawalRequestsPage() {
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
                         <button
-                          onClick={() => handleAction(w._id, "approved")}
-                          disabled={actionId === w._id}
+                          onClick={() => handleAction(w.id, "approved")}
+                          disabled={actionId === w.id}
                           className="rounded-lg bg-green-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-green-600 disabled:opacity-50"
                         >
-                          {actionId === w._id ? "..." : "Approve"}
+                          {actionId === w.id ? "..." : "Approve"}
                         </button>
                         <button
-                          onClick={() => handleAction(w._id, "rejected")}
-                          disabled={actionId === w._id}
+                          onClick={() => handleAction(w.id, "rejected")}
+                          disabled={actionId === w.id}
                           className="rounded-lg bg-red-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-red-600 disabled:opacity-50"
                         >
-                          {actionId === w._id ? "..." : "Reject"}
+                          {actionId === w.id ? "..." : "Reject"}
                         </button>
                       </div>
                     </td>

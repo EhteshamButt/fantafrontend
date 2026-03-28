@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { adminApi } from "@/lib/api";
 
 interface UserItem {
-  _id: string;
+  id: string;
   email: string;
   name: string;
   role: string;
@@ -39,9 +39,9 @@ export default function AdminUsersPage() {
     try {
       const updated = (await adminApi.updateUserRole(userId, newRole)) as UserItem;
       setUsers((prev) =>
-        prev.map((u) => (u._id === userId ? { ...u, role: updated.role } : u))
+        prev.map((u) => (u.id === userId ? { ...u, role: updated.role } : u))
       );
-      const userName = users.find((u) => u._id === userId)?.name || "User";
+      const userName = users.find((u) => u.id === userId)?.name || "User";
       setSuccess(`${userName} role updated to ${newRole}`);
       setTimeout(() => setSuccess(""), 3000);
     } catch (err: unknown) {
@@ -101,7 +101,7 @@ export default function AdminUsersPage() {
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {users.map((u) => (
-                  <tr key={u._id} className="transition-colors hover:bg-gray-50">
+                  <tr key={u.id} className="transition-colors hover:bg-gray-50">
                     <td className="whitespace-nowrap px-4 py-3 font-medium text-gray-800">
                       {u.name}
                     </td>
@@ -116,15 +116,15 @@ export default function AdminUsersPage() {
                     <td className="whitespace-nowrap px-4 py-3">
                       <select
                         value={u.role}
-                        onChange={(e) => handleRoleChange(u._id, e.target.value)}
-                        disabled={updating === u._id}
+                        onChange={(e) => handleRoleChange(u.id, e.target.value)}
+                        disabled={updating === u.id}
                         className="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm text-gray-800 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 disabled:opacity-50"
                       >
                         <option value="user">User</option>
                         <option value="client">Client</option>
                         <option value="admin">Admin</option>
                       </select>
-                      {updating === u._id && (
+                      {updating === u.id && (
                         <span className="ml-2 text-xs text-gray-400">Saving...</span>
                       )}
                     </td>

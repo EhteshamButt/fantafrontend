@@ -110,7 +110,7 @@ export default function ClientDashboard() {
   };
 
   const handleCopyReferLink = async () => {
-    const link = `${window.location.origin}/login?ref=${user?.id || ""}`;
+    const link = `${window.location.origin}/login?ref=${user?.referralCode || user?.id || ""}`;
     try {
       await navigator.clipboard.writeText(link);
       setCopied(true);
@@ -175,7 +175,7 @@ export default function ClientDashboard() {
             </svg>
           </button>
           {showWallet && (
-            <p className="mt-1 text-lg font-bold text-white">Rs 0.00</p>
+            <p className="mt-1 text-lg font-bold text-white">Rs {parseFloat(String(user?.walletBalance || 0)).toFixed(2)}</p>
           )}
 
           {/* Copy Refer link */}

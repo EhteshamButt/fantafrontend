@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { authApi, setAccessToken } from "@/lib/api";
 
 interface AuthResult {
@@ -20,9 +21,11 @@ function redirectByRole(role: string): string {
   }
 }
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
-  const [isLogin, setIsLogin] = useState(true);
+  const searchParams = useSearchParams();
+  const refCode = searchParams.get("ref") || "";
+  const [isLogin, setIsLogin] = useState(!refCode);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -58,6 +61,7 @@ export default function LoginPage() {
           email: form.email,
           password: form.password,
           name: form.name,
+          ...(refCode ? { referralCode: refCode } : {}),
         })) as AuthResult;
       }
       setAccessToken(result.accessToken);
@@ -231,5 +235,13 @@ export default function LoginPage() {
         &copy; 2026 Fanta ADS. All rights reserved.
       </p>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }

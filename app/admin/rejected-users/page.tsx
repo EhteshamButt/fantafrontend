@@ -6,8 +6,8 @@ import DataTable from "../components/DataTable";
 import ScreenshotModal from "../components/ScreenshotModal";
 
 interface RejectedPayment {
-  _id: string;
-  userId: { _id: string; name: string; email: string };
+  id: string;
+  user?: { id: string; name: string; email: string };
   packageName: string;
   amount: number;
   trxId: string;
@@ -32,12 +32,12 @@ export default function RejectedUsersPage() {
     {
       key: "userName",
       label: "User Name",
-      render: (item: RejectedPayment) => item.userId?.name || "Unknown",
+      render: (item: RejectedPayment) => item.user?.name || "Unknown",
     },
     {
       key: "userEmail",
       label: "Email",
-      render: (item: RejectedPayment) => item.userId?.email || "",
+      render: (item: RejectedPayment) => item.user?.email || "",
     },
     { key: "packageName", label: "Package" },
     {

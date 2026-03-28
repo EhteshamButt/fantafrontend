@@ -78,7 +78,7 @@ export const authApi = {
   login: (email: string, password: string) =>
     api("/auth/login", { method: "POST", body: { email, password } }),
 
-  register: (data: { email: string; password: string; name: string }) =>
+  register: (data: { email: string; password: string; name: string; referralCode?: string }) =>
     api("/auth/register", { method: "POST", body: data }),
 
   profile: () => api("/auth/profile"),
@@ -150,8 +150,9 @@ export interface DashboardStats {
 }
 
 export interface WithdrawalRecord {
-  _id: string;
-  userId: { _id: string; name: string; email: string };
+  id: string;
+  userId: string;
+  user?: { id: string; name: string; email: string };
   method: "easypaisa" | "jazzcash";
   amount: number;
   trxId: string;
@@ -161,8 +162,9 @@ export interface WithdrawalRecord {
 }
 
 export interface PaymentRecord {
-  _id: string;
-  userId: { _id: string; name: string; email: string };
+  id: string;
+  userId: string;
+  user?: { id: string; name: string; email: string };
   packageId: string;
   packageName: string;
   amount: number;

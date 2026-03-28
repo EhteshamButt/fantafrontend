@@ -5,7 +5,7 @@ import { adminApi } from "@/lib/api";
 import DataTable from "../components/DataTable";
 
 interface ApprovedUser {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   role: string;

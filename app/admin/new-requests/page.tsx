@@ -22,7 +22,7 @@ export default function NewRequestsPage() {
     setActionId(id);
     try {
       await adminApi.updatePaymentStatus(id, status);
-      setPayments((prev) => prev.filter((p) => p._id !== id));
+      setPayments((prev) => prev.filter((p) => p.id !== id));
     } catch (err) {
       console.error(err);
       alert("Failed to update payment status");
@@ -80,14 +80,14 @@ export default function NewRequestsPage() {
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {payments.map((p) => (
-                  <tr key={p._id} className="transition-colors hover:bg-gray-50">
+                  <tr key={p.id} className="transition-colors hover:bg-gray-50">
                     <td className="px-4 py-3">
                       <div>
                         <p className="font-medium text-gray-800">
-                          {p.userId?.name || "Unknown"}
+                          {p.user?.name || "Unknown"}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {p.userId?.email || ""}
+                          {p.user?.email || ""}
                         </p>
                       </div>
                     </td>
@@ -121,18 +121,18 @@ export default function NewRequestsPage() {
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
                         <button
-                          onClick={() => handleAction(p._id, "approved")}
-                          disabled={actionId === p._id}
+                          onClick={() => handleAction(p.id, "approved")}
+                          disabled={actionId === p.id}
                           className="rounded-lg bg-green-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-green-600 disabled:opacity-50"
                         >
-                          {actionId === p._id ? "..." : "Approve"}
+                          {actionId === p.id ? "..." : "Approve"}
                         </button>
                         <button
-                          onClick={() => handleAction(p._id, "rejected")}
-                          disabled={actionId === p._id}
+                          onClick={() => handleAction(p.id, "rejected")}
+                          disabled={actionId === p.id}
                           className="rounded-lg bg-red-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-red-600 disabled:opacity-50"
                         >
-                          {actionId === p._id ? "..." : "Reject"}
+                          {actionId === p.id ? "..." : "Reject"}
                         </button>
                       </div>
                     </td>

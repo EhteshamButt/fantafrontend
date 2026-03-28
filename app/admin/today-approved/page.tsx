@@ -5,8 +5,8 @@ import { adminApi } from "@/lib/api";
 import DataTable from "../components/DataTable";
 
 interface TodayApproved {
-  _id: string;
-  userId: { _id: string; name: string; email: string };
+  id: string;
+  user?: { id: string; name: string; email: string };
   packageName: string;
   amount: number;
   updatedAt: string;
@@ -16,12 +16,12 @@ const columns = [
   {
     key: "userName",
     label: "User Name",
-    render: (item: TodayApproved) => item.userId?.name || "Unknown",
+    render: (item: TodayApproved) => item.user?.name || "Unknown",
   },
   {
     key: "userEmail",
     label: "Email",
-    render: (item: TodayApproved) => item.userId?.email || "",
+    render: (item: TodayApproved) => item.user?.email || "",
   },
   { key: "packageName", label: "Package" },
   {
