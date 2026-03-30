@@ -33,7 +33,10 @@ function LoginForm() {
     email: "",
     password: "",
     confirmPassword: "",
-    name: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    referralCode: refCode,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,11 +60,13 @@ function LoginForm() {
       if (isLogin) {
         result = (await authApi.login(form.email, form.password)) as AuthResult;
       } else {
+        const fullName = `${form.firstName.trim()} ${form.lastName.trim()}`.trim();
         result = (await authApi.register({
           email: form.email,
           password: form.password,
-          name: form.name,
-          ...(refCode ? { referralCode: refCode } : {}),
+          name: fullName,
+          ...(form.phone ? { phone: form.phone } : {}),
+          ...(form.referralCode ? { referralCode: form.referralCode } : {}),
         })) as AuthResult;
       }
       setAccessToken(result.accessToken);
@@ -109,67 +114,146 @@ function LoginForm() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Referral Code - only on signup */}
           {!isLogin && (
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-                <svg className="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </div>
+            <div>
+              <label className="mb-1.5 block text-sm font-bold text-white">Referral Code</label>
               <input
                 type="text"
-                name="name"
-                value={form.name}
+                name="referralCode"
+                value={form.referralCode}
+                onChange={handleChange}
+                readOnly={!!refCode}
+                className={`w-full rounded-xl py-3 px-4 text-sm text-white placeholder-gray-500 outline-none transition ${
+                  refCode
+                    ? "border-2 border-orange-500 bg-orange-500/20 font-semibold tracking-widest"
+                    : "border border-white/10 bg-white/5 focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30"
+                }`}
+                style={refCode ? { background: "linear-gradient(135deg, #f97316, #ea580c)" } : {}}
+                placeholder="Enter Referral Code (Optional)"
+              />
+              {refCode && (
+                <p className="mt-1 flex items-center gap-1 text-xs text-green-400">
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  Referral code automatically applied
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* First Name - only on signup */}
+          {!isLogin && (
+            <div>
+              <label className="mb-1.5 block text-sm font-bold text-white">First Name</label>
+              <input
+                type="text"
+                name="firstName"
+                value={form.firstName}
                 onChange={handleChange}
                 required={!isLogin}
-                className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-white placeholder-gray-500 outline-none transition focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30"
-                placeholder="Full Name"
+                className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-white placeholder-gray-500 outline-none transition focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30"
+                style={{ background: "linear-gradient(135deg, #f97316, #ea580c)" }}
+                placeholder="Enter Your First Name..."
               />
             </div>
           )}
 
-          <div className="relative">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-              <svg className="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-white placeholder-gray-500 outline-none transition focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30"
-              placeholder="Email Address"
-            />
-          </div>
-
-          <div className="relative">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-              <svg className="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-              minLength={8}
-              className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-white placeholder-gray-500 outline-none transition focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30"
-              placeholder="Password"
-            />
-          </div>
-
+          {/* Last Name - only on signup */}
           {!isLogin && (
+            <div>
+              <label className="mb-1.5 block text-sm font-bold text-white">Last Name</label>
+              <input
+                type="text"
+                name="lastName"
+                value={form.lastName}
+                onChange={handleChange}
+                required={!isLogin}
+                className="w-full rounded-xl border border-white/10 bg-white/5 py-3 px-4 text-sm text-white placeholder-gray-500 outline-none transition focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30"
+                style={{ background: "linear-gradient(135deg, #f97316, #ea580c)" }}
+                placeholder="Enter Your Last Name..."
+              />
+            </div>
+          )}
+
+          {/* Email */}
+          <div>
+            {!isLogin && <label className="mb-1.5 block text-sm font-bold text-white">Email</label>}
             <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-                <svg className="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-              </div>
+              {isLogin && (
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                  <svg className="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+              )}
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                className={`w-full rounded-xl py-3 text-sm text-white placeholder-gray-500 outline-none transition ${
+                  isLogin
+                    ? "border border-white/10 bg-white/5 pl-10 pr-4 focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30"
+                    : "border border-white/10 px-4 focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30"
+                }`}
+                style={!isLogin ? { background: "linear-gradient(135deg, #f97316, #ea580c)" } : {}}
+                placeholder={isLogin ? "Email Address" : "Enter Your Email..."}
+              />
+            </div>
+          </div>
+
+          {/* Phone Number - only on signup */}
+          {!isLogin && (
+            <div>
+              <label className="mb-1.5 block text-sm font-bold text-white">Phone Number</label>
+              <input
+                type="tel"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white placeholder-gray-500 outline-none transition focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30"
+                style={{ background: "linear-gradient(135deg, #f97316, #ea580c)" }}
+                placeholder="Enter Your Phone Number..."
+              />
+            </div>
+          )}
+
+          {/* Password */}
+          <div>
+            {!isLogin && <label className="mb-1.5 block text-sm font-bold text-white">Password</label>}
+            <div className="relative">
+              {isLogin && (
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                  <svg className="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+              )}
+              <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+                minLength={8}
+                className={`w-full rounded-xl py-3 text-sm text-white placeholder-gray-500 outline-none transition ${
+                  isLogin
+                    ? "border border-white/10 bg-white/5 pl-10 pr-4 focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30"
+                    : "border border-white/10 px-4 focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30"
+                }`}
+                style={!isLogin ? { background: "linear-gradient(135deg, #f97316, #ea580c)" } : {}}
+                placeholder={isLogin ? "Password" : "Enter Your Password..."}
+              />
+            </div>
+          </div>
+
+          {/* Confirm Password - only on signup */}
+          {!isLogin && (
+            <div>
+              <label className="mb-1.5 block text-sm font-bold text-white">Confirm Password</label>
               <input
                 type="password"
                 name="confirmPassword"
@@ -177,8 +261,9 @@ function LoginForm() {
                 onChange={handleChange}
                 required={!isLogin}
                 minLength={8}
-                className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-sm text-white placeholder-gray-500 outline-none transition focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30"
-                placeholder="Confirm Password"
+                className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white placeholder-gray-500 outline-none transition focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30"
+                style={{ background: "linear-gradient(135deg, #f97316, #ea580c)" }}
+                placeholder="Confirm Your Password..."
               />
             </div>
           )}
@@ -189,12 +274,6 @@ function LoginForm() {
                 Forgot password?
               </button>
             </div>
-          )}
-
-          {!isLogin && (
-            <p className="text-xs text-gray-500">
-              Min 8 chars, uppercase, lowercase, number & special character
-            </p>
           )}
 
           <button
@@ -221,7 +300,7 @@ function LoginForm() {
             onClick={() => {
               setIsLogin(!isLogin);
               setError("");
-              setForm({ email: "", password: "", confirmPassword: "", name: "" });
+              setForm({ email: "", password: "", confirmPassword: "", firstName: "", lastName: "", phone: "", referralCode: refCode });
             }}
             className="font-semibold text-orange-400 hover:text-orange-300 transition"
           >

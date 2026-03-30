@@ -78,7 +78,7 @@ export const authApi = {
   login: (email: string, password: string) =>
     api("/auth/login", { method: "POST", body: { email, password } }),
 
-  register: (data: { email: string; password: string; name: string; referralCode?: string }) =>
+  register: (data: { email: string; password: string; name: string; phone?: string; referralCode?: string }) =>
     api("/auth/register", { method: "POST", body: data }),
 
   profile: () => api("/auth/profile"),
