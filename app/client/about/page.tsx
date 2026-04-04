@@ -24,9 +24,26 @@ export default function AboutPage() {
 
         {/* Body */}
         <div className="px-5 py-6">
-          <p className="text-center text-sm text-gray-300">
-            About Fanta Earn — coming soon.
-          </p>
+          <div className="prose prose-invert mx-auto max-w-none">
+            <h2 className="mb-4 text-center text-xl font-semibold text-white">About Us</h2>
+            <p className="text-justify text-gray-300">
+              FANTA EARN is a e-commerce company, FANTA EARN provides a complete set of
+              services for online retailers including marketing and shop templates to simplify
+              the process of opening an online store for small businesses. Increase sales and
+              increase product popularity.
+            </p>
+            <p className="mt-4 text-justify text-gray-300">
+              FANTA EARN is an online marketplace created in November 2016 to level the playing
+              field for online retailers and provide better e-commerce for everyone. FANTA EARN
+              never holds any of its own retail inventory, and every product on the site is listed
+              by an independent business, so anyone looking to sell on FANTA EARN will only be
+              competing with other sellers, not the platform itself.
+            </p>
+            <p className="mt-4 text-justify text-gray-300">
+              If you want to know more, please feel free to contact us. You can learn about and
+              contact us through the following channels.
+            </p>
+          </div>
           <div className="mt-6 flex justify-center">
             <Link
               href="/client/dashboard"
