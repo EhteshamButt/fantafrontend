@@ -1,25 +1,42 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function AboutPage() {
   return (
-    <div className="flex min-h-[70vh] flex-col items-center justify-center px-4">
-      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-orange-500/20">
-        <svg className="h-10 w-10 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
+    <div className="flex min-h-[70vh] w-full items-center justify-center px-4">
+      <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-700 bg-slate-800 shadow-xl">
+        {/* Image-style header */}
+        <div className="relative h-40 w-full">
+          <Image
+            src="https://dummyimage.com/1200x400/0f172a/ffa500.png&text=Fanta+Earn"
+            alt="Fanta Earn banner"
+            fill
+            className="object-cover opacity-90"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-slate-900/10" />
+          <h1 className="absolute bottom-3 left-4 text-2xl font-bold text-white">
+            About Us
+          </h1>
+        </div>
+
+        {/* Body */}
+        <div className="px-5 py-6">
+          <p className="text-center text-sm text-gray-300">
+            About Fanta Earn — coming soon.
+          </p>
+          <div className="mt-6 flex justify-center">
+            <Link
+              href="/client/dashboard"
+              className="rounded-lg bg-orange-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600"
+            >
+              Back to Dashboard
+            </Link>
+          </div>
+        </div>
       </div>
-      <h2 className="mt-4 text-xl font-bold text-white">About Us</h2>
-      <p className="mt-2 text-center text-sm text-gray-400">
-        About Fanta Earn — coming soon.
-      </p>
-      <Link
-        href="/client/dashboard"
-        className="mt-6 rounded-lg bg-orange-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600"
-      >
-        Back to Dashboard
-      </Link>
     </div>
   );
 }
