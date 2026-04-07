@@ -3,6 +3,16 @@
 import { FormEvent, useEffect, useState } from "react";
 import { generalSettingsApi } from "@/lib/api";
 
+function sanitizeHex(value: string) {
+  return value.replace(/[^0-9a-fA-F]/g, "").slice(0, 6);
+}
+
+function toPreviewHex(value: string, fallback: string) {
+  const safe = sanitizeHex(value);
+  if (safe.length === 3 || safe.length === 6) return `#${safe}`;
+  return fallback;
+}
+
 export default function GeneralSettingPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -125,25 +135,31 @@ export default function GeneralSettingPage() {
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">Site Base Color</label>
               <div className="flex h-12 items-center overflow-hidden rounded-md border border-slate-300 bg-white">
-                <input
-                  type="color"
-                  value={`#${form.siteBaseColor}`}
-                  onChange={(e) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      siteBaseColor: e.target.value.replace("#", ""),
-                    }))
-                  }
-                  className="h-full w-28 cursor-pointer border-0 bg-transparent p-0"
-                  disabled={loading || saving}
-                />
+                <div className="relative h-full w-28">
+                  <div
+                    className="h-full w-full"
+                    style={{ backgroundColor: toPreviewHex(form.siteBaseColor, "#e65353") }}
+                  />
+                  <input
+                    type="color"
+                    value={toPreviewHex(form.siteBaseColor, "#e65353")}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        siteBaseColor: e.target.value.replace("#", ""),
+                      }))
+                    }
+                    className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                    disabled={loading || saving}
+                  />
+                </div>
                 <input
                   type="text"
                   value={form.siteBaseColor}
                   onChange={(e) =>
                     setForm((prev) => ({
                       ...prev,
-                      siteBaseColor: e.target.value.replace("#", ""),
+                      siteBaseColor: sanitizeHex(e.target.value),
                     }))
                   }
                   className="h-full flex-1 border-0 px-4 text-slate-700 outline-none"
@@ -155,25 +171,31 @@ export default function GeneralSettingPage() {
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">Site Secondary Color</label>
               <div className="flex h-12 items-center overflow-hidden rounded-md border border-slate-300 bg-white">
-                <input
-                  type="color"
-                  value={`#${form.siteSecondaryColor}`}
-                  onChange={(e) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      siteSecondaryColor: e.target.value.replace("#", ""),
-                    }))
-                  }
-                  className="h-full w-28 cursor-pointer border-0 bg-transparent p-0"
-                  disabled={loading || saving}
-                />
+                <div className="relative h-full w-28">
+                  <div
+                    className="h-full w-full"
+                    style={{ backgroundColor: toPreviewHex(form.siteSecondaryColor, "#000000") }}
+                  />
+                  <input
+                    type="color"
+                    value={toPreviewHex(form.siteSecondaryColor, "#000000")}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        siteSecondaryColor: e.target.value.replace("#", ""),
+                      }))
+                    }
+                    className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                    disabled={loading || saving}
+                  />
+                </div>
                 <input
                   type="text"
                   value={form.siteSecondaryColor}
                   onChange={(e) =>
                     setForm((prev) => ({
                       ...prev,
-                      siteSecondaryColor: e.target.value.replace("#", ""),
+                      siteSecondaryColor: sanitizeHex(e.target.value),
                     }))
                   }
                   className="h-full flex-1 border-0 px-4 text-slate-700 outline-none"
