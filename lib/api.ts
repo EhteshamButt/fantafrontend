@@ -232,6 +232,22 @@ export interface ReferralSettingRecord {
   levels: { level: number; percentage: number }[];
 }
 
+export interface GeneralSettingRecord {
+  id: string;
+  siteTitle: string;
+  currency: string;
+  currencySymbol: string;
+  timezone: string;
+  siteBaseColor: string;
+  siteSecondaryColor: string;
+  registrationBonus: number;
+  defaultPlan: string;
+  balanceTransferFixedCharge: number;
+  balanceTransferPercentCharge: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export const referralSettingsApi = {
   getAll: () => api<ReferralSettingRecord[]>("/referral-settings"),
 
@@ -246,6 +262,27 @@ export const referralSettingsApi = {
       method: "PATCH",
       body: { enabled },
     }),
+};
+
+export const generalSettingsApi = {
+  get: () => api<GeneralSettingRecord>("/general-settings"),
+  update: (
+    payload: Partial<
+      Pick<
+        GeneralSettingRecord,
+        | "siteTitle"
+        | "currency"
+        | "currencySymbol"
+        | "timezone"
+        | "siteBaseColor"
+        | "siteSecondaryColor"
+        | "registrationBonus"
+        | "defaultPlan"
+        | "balanceTransferFixedCharge"
+        | "balanceTransferPercentCharge"
+      >
+    >
+  ) => api<GeneralSettingRecord>("/general-settings", { method: "PATCH", body: payload }),
 };
 
 export const withdrawalApi = {

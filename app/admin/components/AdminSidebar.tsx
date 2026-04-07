@@ -155,11 +155,12 @@ export default function AdminSidebar({ pendingRequests, withdrawalRequests, onCl
   return (
     <div className="flex h-full flex-col bg-[#0f1a2e]">
       {/* Logo */}
-      <div className="flex items-center gap-3 px-4 py-5">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 text-sm font-extrabold text-white">
-          FA
-        </div>
-        <span className="text-lg font-bold text-white">Fanta ADS</span>
+      <div className="flex items-center justify-center px-4 py-5">
+        <img
+          src="https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775556882/fanta_logo_1_rchhe0.png"
+          alt="Fanta Logo"
+          className="h-auto w-[92px] object-contain"
+        />
       </div>
 
       {/* Navigation */}
