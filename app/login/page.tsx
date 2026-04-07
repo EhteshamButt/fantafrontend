@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { authApi, setAccessToken } from "@/lib/api";
+import Image from "next/image";
 
 interface AuthResult {
   user: { id: string; email: string; name: string; role: string };
@@ -82,19 +83,17 @@ function LoginForm() {
     <div className="flex min-h-screen flex-col items-center justify-center px-4"
       style={{ background: "linear-gradient(180deg, #0a0e27 0%, #111638 50%, #0a0e27 100%)" }}
     >
-      {/* Logo */}
-      <div className="mb-8 flex flex-col items-center">
-        <div
-          className="flex h-20 w-20 items-center justify-center"
-          style={{
-            background: "linear-gradient(135deg, #f97316, #ea580c)",
-            clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
-          }}
-        >
-          <span className="text-2xl font-black text-white">F</span>
-        </div>
-        <h2 className="mt-3 text-xl font-bold text-white tracking-wide">Fanta ADS</h2>
-      </div>
+ <div className="flex justify-center mb-6">
+  <div className="relative w-44 h-28 sm:w-56 sm:h-36">
+    <Image
+      src="https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775556882/fanta_logo_1_rchhe0.png"
+      alt="Fanta ADS"
+      fill
+      className="object-contain"
+      priority
+    />
+  </div>
+</div>
 
       {/* Card */}
       <div className="w-full max-w-sm rounded-2xl p-6"
