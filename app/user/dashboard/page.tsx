@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from "react";
-
+import { useRouter } from 'next/navigation';
 interface Package {
   id: string;
   name: string;
@@ -24,6 +24,16 @@ function formatPrice(price: number) {
 }
 
 export default function UserDashboard() {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    // 1. Remove the token
+    localStorage.removeItem("access_token");
+    
+    // 2. Redirect to the login page
+    // Note: In Next.js, use router.push() for internal navigation
+    router.push('/login');
+  };
   const [selectedPkg, setSelectedPkg] = useState<Package | null>(null);
   const [trxId, setTrxId] = useState("");
   const [senderNumber, setSenderNumber] = useState("");
@@ -236,11 +246,40 @@ export default function UserDashboard() {
   return (
     <div className="flex min-h-screen flex-col bg-[#0a1628]">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+      {/* <header className="flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <p className="text-sm font-medium text-white sm:text-base">
           Welcome to <span className="text-orange-400">FantaEarn</span>
         </p>
-      </header>
+      </header> */}
+      {/* Header with Logo */}
+      <header className="flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+      {/* Left side */}
+      <p className="text-sm font-medium text-white sm:text-base">
+        Welcome to <span className="text-orange-400">FantaEarn</span>
+      </p>
+
+      {/* Right side - Logout Icon */}
+      <button 
+        onClick={handleLogout}
+        className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 transition-transform active:scale-95 hover:bg-orange-600 focus:outline-none"
+        aria-label="Logout"
+      >
+        <svg 
+          className="h-6 w-6 text-white" 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24" 
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth={2} 
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" 
+          />
+        </svg>
+      </button>
+    </header>
 
       <main className="flex flex-1 flex-col items-center px-4 pb-12 pt-4 sm:px-6">
         {/* Error Message */}
@@ -249,6 +288,12 @@ export default function UserDashboard() {
             {submitError}
           </div>
         )}
+<h1 className="flex flex-col items-center justify-center pt-16 pb-6">  <img
+    src="https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775666576/fatbabotle_lpufpb.png"
+    alt="Fanta Logo"
+    className="h-24 sm:h-28 lg:h-36 w-auto object-contain"
+  />
+</h1>
 
         {/* Package Selection */}
         <h1 className="mb-8 text-center text-xl font-bold text-white underline decoration-2 underline-offset-8 sm:mb-10 sm:text-2xl lg:text-3xl">
