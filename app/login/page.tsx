@@ -79,11 +79,36 @@ function LoginForm() {
     }
   };
 
-  const inputStyle: React.CSSProperties = {
+  // Login form: light gray inputs
+  const loginInputStyle: React.CSSProperties = {
     backgroundColor: "#dce3ef",
     color: "#111827",
     border: "none",
-    fontSize: "16px", // prevents iOS auto-zoom on focus
+    fontSize: "16px",
+  };
+
+  // Signup form: orange inputs with white text
+  const signupInputStyle: React.CSSProperties = {
+    backgroundColor: "#f97316",
+    color: "#ffffff",
+    border: "none",
+    fontSize: "16px",
+  };
+
+  const inputStyle = isLogin ? loginInputStyle : signupInputStyle;
+
+  const switchForm = () => {
+    setIsLogin(!isLogin);
+    setError("");
+    setForm({
+      email: "",
+      password: "",
+      confirmPassword: "",
+      firstName: "",
+      lastName: "",
+      phone: "",
+      referralCode: refCode,
+    });
   };
 
   return (
@@ -91,24 +116,24 @@ function LoginForm() {
       className="min-h-screen w-full flex flex-col items-center"
       style={{ backgroundColor: "#0b1929" }}
     >
-<div className="flex justify-center pt-2 pb-4 sm:pt-3 sm:pb-6">
-  {/* I increased the width to 500px (w-[500px]) but kept your exact height */}
-  <div className="relative w-[190px] sm:w-[250px] md:w-[300px] h-36 sm:h-40 md:h-44">
-    <Image
-      src="https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775556882/fanta_logo_1_rchhe0.png"
-      alt="Fanta ADS"
-      fill
-      // style={{ objectFit: 'contain' }}
-      priority
-    />
-  </div>
-</div>
+      {/* ── Logo ── */}
+      <div className="flex justify-center pt-2 pb-4 sm:pt-3 sm:pb-6">
+        <div className="relative w-47.5 sm:w-62.5 md:w-75 h-36 sm:h-40 md:h-44">
+          <Image
+            src="https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775556882/fanta_logo_1_rchhe0.png"
+            alt="Fanta ADS"
+            fill
+            // className="object-contain"
+            priority
+          />
+        </div>
+      </div>
 
       {/* ── Form wrapper ── */}
       <div className="w-full px-5 sm:px-0 sm:max-w-sm md:max-w-md">
 
         <h1 className="mb-5 text-center text-2xl font-bold text-white tracking-wide">
-          {isLogin ? "Login" : "Sign Up"}
+          {isLogin ? "Login" : "Signup"}
         </h1>
 
         {error && (
@@ -130,9 +155,9 @@ function LoginForm() {
                   value={form.referralCode}
                   onChange={handleChange}
                   readOnly={!!refCode}
-                  className="w-full rounded-lg py-3 px-4 outline-none transition"
-                  style={inputStyle}
-                  placeholder="Enter Referral Code (Optional)"
+                  className="w-full rounded-lg py-3 px-4 outline-none transition placeholder-white/80"
+                  style={signupInputStyle}
+                  placeholder="Enter Referral Code here"
                 />
                 {refCode && (
                   <p className="mt-1 flex items-center gap-1 text-xs text-green-400">
@@ -152,8 +177,8 @@ function LoginForm() {
                   value={form.firstName}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-lg py-3 px-4 outline-none transition"
-                  style={inputStyle}
+                  className="w-full rounded-lg py-3 px-4 outline-none transition placeholder-white/80"
+                  style={signupInputStyle}
                   placeholder="Enter Your First Name..."
                 />
               </div>
@@ -166,8 +191,8 @@ function LoginForm() {
                   value={form.lastName}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-lg py-3 px-4 outline-none transition"
-                  style={inputStyle}
+                  className="w-full rounded-lg py-3 px-4 outline-none transition placeholder-white/80"
+                  style={signupInputStyle}
                   placeholder="Enter Your Last Name..."
                 />
               </div>
@@ -185,9 +210,9 @@ function LoginForm() {
               value={form.email}
               onChange={handleChange}
               required
-              className="w-full rounded-lg py-3 px-4 outline-none transition"
+              className={`w-full rounded-lg py-3 px-4 outline-none transition ${!isLogin ? "placeholder-white/80" : ""}`}
               style={inputStyle}
-              placeholder="Enter your email..."
+              placeholder={isLogin ? "Enter your email..." : "Enter Your Email..."}
             />
           </div>
 
@@ -200,8 +225,8 @@ function LoginForm() {
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                className="w-full rounded-lg py-3 px-4 outline-none transition"
-                style={inputStyle}
+                className="w-full rounded-lg py-3 px-4 outline-none transition placeholder-white/80"
+                style={signupInputStyle}
                 placeholder="Enter Your Phone Number..."
               />
             </div>
@@ -217,9 +242,9 @@ function LoginForm() {
               onChange={handleChange}
               required
               minLength={8}
-              className="w-full rounded-lg py-3 px-4 outline-none transition"
+              className={`w-full rounded-lg py-3 px-4 outline-none transition ${!isLogin ? "placeholder-white/80" : ""}`}
               style={inputStyle}
-              placeholder="Enter your password..."
+              placeholder={isLogin ? "Enter your password..." : "Enter Your Password..."}
             />
           </div>
 
@@ -234,34 +259,35 @@ function LoginForm() {
                 onChange={handleChange}
                 required
                 minLength={8}
-                className="w-full rounded-lg py-3 px-4 outline-none transition"
-                style={inputStyle}
+                className="w-full rounded-lg py-3 px-4 outline-none transition placeholder-white/80"
+                style={signupInputStyle}
                 placeholder="Confirm Your Password..."
               />
             </div>
           )}
 
-          {/* ── Toggle SignUp / Login ── */}
-          <div className="pt-1">
-            <button
-              type="button"
-              onClick={() => {
-                setIsLogin(!isLogin);
-                setError("");
-                setForm({
-                  email: "",
-                  password: "",
-                  confirmPassword: "",
-                  firstName: "",
-                  lastName: "",
-                  phone: "",
-                  referralCode: refCode,
-                });
-              }}
-              className="text-sm text-gray-300 underline underline-offset-2 hover:text-white transition"
-            >
-              {isLogin ? "SignUp?" : "Login?"}
-            </button>
+          {/* ── Toggle link ── */}
+          <div className="pt-1 text-center">
+            {isLogin ? (
+              <button
+                type="button"
+                onClick={switchForm}
+                className="text-sm text-gray-300 underline underline-offset-2 hover:text-white transition"
+              >
+                SignUp?
+              </button>
+            ) : (
+              <p className="text-sm text-white">
+                Back To Login{" "}
+                <button
+                  type="button"
+                  onClick={switchForm}
+                  className="text-orange-400 underline underline-offset-2 hover:text-orange-300 transition font-semibold"
+                >
+                  Here
+                </button>
+              </p>
+            )}
           </div>
 
           {/* ── Submit Button ── */}
