@@ -49,7 +49,7 @@ const actionCards = [
   },
   {
     label: "Salary",
-    href: "/client/salary",
+    href: "/client/salary-overview",
     bg: "bg-orange-500",
     icon: (
       <svg className="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

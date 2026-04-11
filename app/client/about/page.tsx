@@ -1,56 +1,33 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-
 export default function AboutPage() {
   return (
-    <div className="flex min-h-[70vh] w-full items-center justify-center px-4">
-      <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-700 bg-slate-800 shadow-xl">
-        {/* Header with brand logo and title */}
-        <div className="flex flex-col items-center px-6 pt-6">
-          <Image
-            src="https://fantaearn.com/assets/images/logoIcon/fanta_logo.png"
-            alt="Fanta Earn Logo"
-            width={220}
-            height={120}
-            priority
-            className="h-auto w-[180px] sm:w-[220px] object-contain"
-          />
-          <h1 className="mt-4 inline-block rounded-md bg-blue-800 px-4 py-1.5 text-2xl font-extrabold leading-none text-white">
-            About Us
-          </h1>
-        </div>
+    <div className="min-h-screen pb-24" style={{ backgroundColor: "#001f3f" }}>
+      {/* Logo */}
+      <a href="/client/dashboard" className="h-44 flex items-center justify-center">
+        <img
+          src="https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775556882/fanta_logo_1_rchhe0.png"
+          alt="Fanta"
+          style={{ width: "300px", height: "150px", objectFit: " " }}
+        />
+      </a>
 
-        {/* Body */}
-        <div className="px-5 pb-6 pt-4">
-          <div className="mx-auto max-w-xl space-y-5 text-center">
-            <p className="mx-auto inline-block rounded bg-blue-900/30 px-3 py-2 text-sm leading-7 text-gray-200">
-              FANTA EARN is a e-commerce company, FANTA EARN provides a complete set of
-              services for online retailers including marketing and shop templates to simplify
-              the process of opening an online store for small businesses. Increase sales and
-              increase product popularity.
-            </p>
-            <p className="mx-auto inline-block rounded bg-blue-900/30 px-3 py-2 text-sm leading-7 text-gray-200">
-              FANTA EARN is an online marketplace created in November 2016 to level the playing
-              field for online retailers and provide better e-commerce for everyone. FANTA EARN
-              never holds any of its own retail inventory, and every product on the site is listed
-              by an independent business, so anyone looking to sell on FANTA EARN will only be
-              competing with other sellers, not the platform itself.
-            </p>
-            <p className="mx-auto inline-block rounded bg-blue-900/30 px-3 py-2 text-sm leading-7 text-gray-200">
-              If you want to know more, please feel free to contact us. You can learn about and
-              contact us through the following channels.
-            </p>
-          </div>
-          <div className="mt-6 flex justify-center">
-            <Link
-              href="/client/dashboard"
-              className="rounded-lg bg-orange-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600"
-            >
-              Back to Dashboard
-            </Link>
-          </div>
+      {/* Content */}
+      <div className="px-4 pt-10 mb-10 max-w-lg mx-auto">
+        <h2 className="text-4xl font-bold text-center text-white mb-8">About Us</h2>
+
+        <div className="text-center text-white mb-8">
+          <p className="text-lg leading-relaxed">
+            FANTA EARN is a e-commerce company, FANTA EARN provides a complete set of services for online retailers including marketing and shop templates to simplify the process of opening an online store for small businesses. Increase sales and increase product popularity.
+          </p>
+          <br />
+          <p className="text-lg leading-relaxed">
+            FANTA EARN is an online marketplace created in November 2016 to level the playing field for online retailers and provide better e-commerce for everyone. FANTA EARN never holds any of its own retail inventory, and every product on the site is listed by an independent business, so anyone looking to sell on FANTA EARN will only be competing with other sellers, not the platform itself.
+          </p>
+          <br />
+          <p className="text-lg leading-relaxed">
+            If you want to know more, please feel free to contact us. You can learn about and contact us through the following channels.
+          </p>
         </div>
       </div>
     </div>
