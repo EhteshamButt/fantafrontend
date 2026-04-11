@@ -267,7 +267,7 @@ function LoginForm() {
           )}
 
           {/* ── Toggle link ── */}
-          <div className="pt-1 text-center">
+          <div className={`pt-1 ${isLogin ? "text-left" : "text-center"}`}>
             {isLogin ? (
               <button
                 type="button"

@@ -10,10 +10,10 @@ interface Package {
 }
 
 const packages: Package[] = [
-  { id: "fanta-basic", name: "Fanta Basic", price: 650, gradient: "from-orange-500 to-orange-600" },
+  { id: "fanta-basic", name: "Basic", price: 650, gradient: "from-orange-500 to-orange-600" },
   { id: "fanta-standard", name: "Fanta Standard", price: 1350, gradient: "from-orange-500 to-orange-600" },
   { id: "fanta-premium", name: "Fanta Premium", price: 2650, gradient: "from-orange-500 to-orange-600" },
-  { id: "fanta-super-premium", name: "Fanta Super Premium", price: 5550, gradient: "from-blue-500 to-cyan-400" },
+  { id: "fanta-super-premium", name: "Fanta Super Premium", price: 5550, gradient: "from-[#0038b8] to-[#00adfc]" },
 ];
 
 const EASYPAISA_NAME = "SIDRA SHAUKAT";
@@ -245,58 +245,47 @@ export default function UserDashboard() {
   // Dashboard Screen
   return (
     <div className="flex min-h-screen flex-col bg-[#0a1628]">
-      {/* Header */}
-      {/* <header className="flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <p className="text-sm font-medium text-white sm:text-base">
-          Welcome to <span className="text-orange-400">FantaEarn</span>
-        </p>
-      </header> */}
-      {/* Header with Logo */}
-      <header className="flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-      {/* Left side */}
-      <p className="text-sm font-medium text-white sm:text-base">
-        Welcome to <span className="text-orange-400">FantaEarn</span>
-      </p>
-
-      {/* Right side - Logout Icon */}
-      <button 
+      {/* Logout button fixed top-right */}
+      <button
         onClick={handleLogout}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 transition-transform active:scale-95 hover:bg-orange-600 focus:outline-none"
+        className="fixed top-4 right-4 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 transition-transform active:scale-95 hover:bg-orange-600 focus:outline-none shadow-lg"
         aria-label="Logout"
       >
-        <svg 
-          className="h-6 w-6 text-white" 
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24" 
+        <svg
+          className="h-6 w-6 text-white"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth={2} 
-            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" 
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
           />
         </svg>
       </button>
-    </header>
 
-      <main className="flex flex-1 flex-col items-center px-4 pb-12 pt-4 sm:px-6">
+      <main className="flex flex-1 flex-col items-center px-4 pb-12 pt-0 sm:px-6">
         {/* Error Message */}
         {submitError && (
           <div className="mb-6 w-full max-w-md rounded-lg bg-red-500/20 px-4 py-3 text-center text-sm font-medium text-red-400">
             {submitError}
           </div>
         )}
-<h1 className="flex flex-col items-center justify-center pt-16 pb-6">  <img
+
+        {/* Logo at very top */}
+<div className="flex flex-col items-center justify-center pt-4 pb-4">
+  <img
     src="https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775666576/fatbabotle_lpufpb.png"
     alt="Fanta Logo"
-    className="h-24 sm:h-28 lg:h-36 w-auto object-contain"
+    /* Width forced to match your top section, Height kept exactly the same */
+    className="h-32 sm:h-28 lg:h-36 lg:h-34 w-52 sm:w-70 md:w-76 object- "
   />
-</h1>
-
+</div>
         {/* Package Selection */}
-        <h1 className="mb-8 text-center text-xl font-bold text-white underline decoration-2 underline-offset-8 sm:mb-10 sm:text-2xl lg:text-3xl">
+        <h1 className="mb-8 text-center text-xl font-bold text-white underline decoration-2 underline-offset-8 sm:mb-10 sm:text-2xl lg:text-">
           Select Package
         </h1>
 
@@ -305,16 +294,16 @@ export default function UserDashboard() {
             <button
               key={pkg.id}
               onClick={() => handleSelectPackage(pkg)}
-              className={`w-full max-w-[280px] cursor-pointer rounded-xl border-2 bg-gradient-to-r ${pkg.gradient} px-6 py-4 text-center shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl active:scale-95 sm:max-w-xs sm:px-8 sm:py-5 ${
+              className={`w-44 cursor-pointer rounded-xl border-2 bg-linear-to-r ${pkg.gradient} px-4 py-4 text-center shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl active:scale-95 flex flex-col items-center justify-center ${
                 selectedPkg?.id === pkg.id
                   ? "border-white ring-2 ring-white/50 scale-105"
                   : "border-green-400"
               }`}
             >
-              <p className="text-base font-bold text-white underline decoration-1 underline-offset-4 sm:text-lg">
+              <p className="text-xl font-bold text-white underline decoration-1 underline-offset-4">
                 {pkg.name}
               </p>
-              <p className="mt-1 text-base font-semibold text-white sm:text-lg">
+              <p className="mt-1 text-xl font-bold text-white">
                 {formatPrice(pkg.price)}.00 Rs
               </p>
             </button>
@@ -350,40 +339,40 @@ export default function UserDashboard() {
             <form onSubmit={handleSubmit} className="mt-6 space-y-4 sm:mt-8">
               {/* Trx ID */}
               <div>
-                <label className="mb-1 block text-sm font-bold text-white">
-                  Trxid ID <span className="text-red-400">*</span>
+                <label className="mb-1 block text-xl font-bold text-white">
+                  Transaction ID <span className="text-white">*</span>
                 </label>
                 <input
                   type="text"
                   value={trxId}
                   onChange={(e) => setTrxId(e.target.value)}
                   required
-                  placeholder="Transaction ID"
-                  className="w-full rounded-lg bg-orange-500 px-4 py-3 text-sm font-medium text-white placeholder-orange-200 outline-none focus:ring-2 focus:ring-white/40 sm:text-base"
+                  placeholder="Enter Transaction ID"
+                  className="w-full rounded-lg bg-orange-500 px-4 py-3 text-xl font-bold text-white placeholder-white/70 outline-none focus:ring-2 focus:ring-white/40"
                 />
               </div>
 
               {/* Sender Number */}
               <div>
-                <label className="mb-1 block text-sm font-bold text-white">
-                  Sender Number <span className="text-red-400">*</span>
+                <label className="mb-1 block text-xl font-bold text-white">
+                  Sender Number <span className="text-white">*</span>
                 </label>
                 <input
                   type="text"
                   value={senderNumber}
                   onChange={(e) => setSenderNumber(e.target.value)}
                   required
-                  placeholder="Sender"
+                  placeholder="Enter Your Mobile Number"
                   inputMode="numeric"
-                  className="w-full rounded-lg bg-orange-500 px-4 py-3 text-sm font-medium text-white placeholder-orange-200 outline-none focus:ring-2 focus:ring-white/40 sm:text-base"
+                  className="w-full rounded-lg bg-orange-500 px-4 py-3 text-xl font-bold text-white placeholder-white/70 outline-none focus:ring-2 focus:ring-white/40"
                 />
               </div>
 
               {/* Screenshot Upload */}
               <div>
-                <label className="mb-1 block text-sm font-bold text-white">
+                <label className="mb-1 block text-xl font-bold text-white">
                   Upload Payment Screenshot{" "}
-                  <span className="text-red-400">*</span>
+                  <span className="text-white">*</span>
                 </label>
                 <input
                   ref={fileRef}
@@ -393,15 +382,15 @@ export default function UserDashboard() {
                   required
                   className="w-full cursor-pointer rounded-lg bg-orange-500 px-4 py-3 text-sm text-white file:mr-3 file:cursor-pointer file:rounded file:border file:border-white/40 file:bg-white/20 file:px-3 file:py-1 file:text-sm file:font-medium file:text-white sm:text-base"
                 />
-                <p className="mt-1 text-xs text-zinc-400">
+                <p className="mt-1 text-sm text-gray-300">
                   Accepted formats: JPG, JPEG, PNG
                 </p>
               </div>
 
               {/* Warning */}
-              <div className="rounded-lg bg-zinc-600/60 px-4 py-3">
-                <p className="text-sm italic text-yellow-400">
-                  <span className="mr-1">&#9888;</span>
+              <div className="rounded-xl bg-white/30 px-4 py-4">
+                <p style={{color:"#D32F2F", fontWeight: '700', fontSize: "1rem", lineHeight: "1.75rem"}}>
+                  <span className="mr-1">⚠️</span>
                   After payment, upload screenshot for verification
                 </p>
               </div>
