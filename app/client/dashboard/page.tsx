@@ -139,48 +139,52 @@ export default function ClientDashboard() {
   };
 
   return (
+    <div className="min-h-screen w-full" style={{backgroundColor: "#001f3f"}}>
     <div className="relative mx-auto max-w-lg px-4 pt-2">
-      {/* Logout button top-right */}
-      <div className="flex justify-end py-2">
-        <button
-          onClick={handleLogout}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 text-white transition hover:bg-orange-600"
-          title="Logout"
-        >
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
-        </button>
-      </div>
+      {/* Logout button fixed top-right */}
+      <button
+        onClick={handleLogout}
+        className="fixed top-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-lg transition active:scale-95"
+        style={{ background: "#ff6c00" }}
+        title="Logout"
+      >
+        <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+      </button>
 
       {/* Orange Octagon */}
       <div className="flex justify-center">
         <div
-          className="flex w-72 flex-col items-center justify-center bg-orange-500 px-8 py-10 sm:w-80"
+          className="flex w-96 flex-col items-center justify-center bg-orange-500 px-12 py-16 sm:w-105"
           style={{
             clipPath:
               "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
           }}
         >
-          {/* Fanta logo placeholder */}
-          <div className="mb-3 flex h-20 w-20 items-center justify-center rounded-xl bg-white shadow-md">
-            <span className="text-3xl font-extrabold text-orange-500">F</span>
+          {/* Fanta logo */}
+          <div className="mb-3 flex h-28 w-28 items-center justify-center rounded-xl bg-white shadow-md">
+            <img
+              src="https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775666576/fatbabotle_lpufpb.png"
+              alt="Fanta"
+              className="h-24 w-auto object-contain"
+            />
           </div>
-          <h1 className="text-2xl font-extrabold text-white sm:text-3xl">
+          <h1 className="text-4xl font-bold text-center text-white">
             Fanta Earn
           </h1>
 
           {/* Show Wallet */}
           <button
             onClick={() => setShowWallet(!showWallet)}
-            className="mt-3 flex items-center gap-1.5 text-sm font-medium text-white underline underline-offset-4 transition hover:text-orange-200"
+            className="mt-3 flex items-center justify-center gap-2 text-lg font-medium text-white underline underline-offset-4 transition hover:text-orange-200"
           >
             Show Wallet
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
               {showWallet ? (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                <path d="M12 4.5C7.305 4.5 3.257 7.61 1.5 12c1.757 4.39 5.805 7.5 10.5 7.5s8.743-3.11 10.5-7.5C20.743 7.61 16.695 4.5 12 4.5zm0 12.5a5 5 0 110-10 5 5 0 010 10zm0-8a3 3 0 100 6 3 3 0 000-6z" />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                <path d="M12 4.5C7.305 4.5 3.257 7.61 1.5 12c1.757 4.39 5.805 7.5 10.5 7.5s8.743-3.11 10.5-7.5C20.743 7.61 16.695 4.5 12 4.5zm0 12.5a5 5 0 110-10 5 5 0 010 10zm0-8a3 3 0 100 6 3 3 0 000-6z" />
               )}
             </svg>
           </button>
@@ -191,10 +195,12 @@ export default function ClientDashboard() {
           {/* Copy Refer link */}
           <button
             onClick={handleCopyReferLink}
-            className="mt-2 flex items-center gap-1.5 text-sm font-medium text-white transition hover:text-orange-200"
+            className="mt-2 flex items-center justify-center gap-2 transition hover:text-orange-200"
           >
-            {copied ? "Copied!" : "Copy Refer link"}
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <p className="flex items-center justify-center gap-2 text-lg font-medium text-white">
+              {copied ? "Copied!" : "Copy Refer link"}
+            </p>
+            <svg className="h-6 w-6 text-white font-bold cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               {copied ? (
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               ) : (
@@ -251,6 +257,7 @@ export default function ClientDashboard() {
           animation: marquee 15s linear infinite;
         }
       `}</style>
+    </div>
     </div>
   );
 }

@@ -46,7 +46,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0a1628]">
+      <div className="flex min-h-screen items-center justify-center bg-[#001f3f]">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-orange-300 border-t-orange-600" />
       </div>
     );
@@ -56,7 +56,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <ClientUserContext.Provider value={user}>
-      <div className="flex min-h-screen flex-col bg-[#0a1628]">
+      <div className="flex min-h-screen flex-col bg-[#001f3f]">
         <div className="flex-1 pb-20">{children}</div>
         <BottomNav />
       </div>

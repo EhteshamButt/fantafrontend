@@ -64,12 +64,11 @@ export default function BottomNav() {
               <Link
                 key={item.label}
                 href={item.href}
-                className={`flex flex-col items-center gap-0.5 transition-opacity ${
+                className={`flex items-center justify-center transition-opacity ${
                   isActive ? "opacity-100" : "opacity-70 hover:opacity-100"
                 }`}
               >
-                <span className="text-white">{item.icon}</span>
-                <span className="text-[10px] font-medium text-white">{item.label}</span>
+                <span className="text-white [&>svg]:h-8 [&>svg]:w-8">{item.icon}</span>
               </Link>
             );
           })}
