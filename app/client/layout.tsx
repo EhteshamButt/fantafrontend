@@ -9,9 +9,12 @@ interface ClientUser {
   id: string;
   email: string;
   name: string;
+  phone?: string | null;
   role: string;
   referralCode?: string;
   walletBalance?: number;
+  level?: number;
+  dailyLimit?: number;
 }
 
 const ClientUserContext = createContext<ClientUser | null>(null);
