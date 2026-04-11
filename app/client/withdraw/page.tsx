@@ -30,41 +30,41 @@ export default function WithdrawPage() {
   };
 
   return (
-    <div className="flex flex-col items-center px-4 pt-6">
-      {/* Fanta ADS Logo */}
-      <div className="mb-8 flex h-28 w-36 items-center justify-center rounded-[50%] bg-orange-500 shadow-lg">
-        <span className="text-center text-2xl font-extrabold leading-tight text-white">
-          Fanta<br />
-          <span className="text-3xl">ADS</span>
-        </span>
-      </div>
+    <div className="flex flex-col items-center px-2 pt-6">
+      {/* Fanta Logo */}
+      <img
+        src="https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775556882/fanta_logo_1_rchhe0.png"
+        alt="Fanta"
+        className="mb-10 object- "
+        style={{ width: "320px", height: "150px" }}
+      />
 
       {/* Messages */}
       {success && (
-        <div className="mb-4 w-full max-w-md rounded-lg bg-green-500/20 px-4 py-3 text-center text-sm font-medium text-green-400">
+        <div className="mb-4 w-full max-w-lg rounded-lg bg-green-500/20 px-4 py-3 text-center text-base font-medium text-green-400">
           {success}
         </div>
       )}
       {error && (
-        <div className="mb-4 w-full max-w-md rounded-lg bg-red-500/20 px-4 py-3 text-center text-sm font-medium text-red-400">
+        <div className="mb-4 w-full max-w-lg rounded-lg bg-red-500/20 px-4 py-3 text-center text-base font-medium text-red-400">
           {error}
         </div>
       )}
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
+      <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-6">
         {/* Method */}
         <div>
-          <label className="mb-2 block text-sm font-bold text-white">
+          <label className="mb-2 block text-xl font-bold text-white">
             Method
           </label>
           <select
             value={method}
             onChange={(e) => setMethod(e.target.value)}
             required
-            className="w-full cursor-pointer appearance-none rounded-lg bg-orange-500 px-4 py-3.5 text-base font-medium text-white outline-none focus:ring-2 focus:ring-white/40"
+            className="w-full cursor-pointer appearance-none rounded-xl bg-orange-500 px-4 py-4 text-xl font-medium text-white outline-none focus:ring-2 focus:ring-white/40"
           >
-            <option value="" className="bg-white text-gray-800">Select One</option>
+            <option value="" style={{ backgroundColor: "#001f3f", color: "white" }}>Select One</option>
             <option value="easypaisa" className="bg-white text-gray-800">Easypaisa</option>
             <option value="jazzcash" className="bg-white text-gray-800">Jazzcash</option>
           </select>
@@ -72,7 +72,7 @@ export default function WithdrawPage() {
 
         {/* Amount */}
         <div>
-          <label className="mb-2 block text-sm font-bold text-white">
+          <label className="mb-2 block text-xl font-bold text-white">
             Amount
           </label>
           <input
@@ -82,7 +82,7 @@ export default function WithdrawPage() {
             required
             min={1}
             placeholder="Enter Amount..."
-            className="w-full rounded-lg bg-orange-500 px-4 py-3.5 text-base font-medium text-white placeholder-orange-200 outline-none focus:ring-2 focus:ring-white/40"
+            className="w-full rounded-xl bg-orange-500 px-4 py-4 text-base font-medium text-white placeholder-orange-200 outline-none focus:ring-2 focus:ring-white/40"
           />
         </div>
 
@@ -91,7 +91,7 @@ export default function WithdrawPage() {
           <button
             type="submit"
             disabled={submitting || !method || !amount}
-            className="rounded-full bg-orange-500 px-10 py-3 text-base font-extrabold text-white shadow-lg transition-all hover:bg-orange-600 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-orange-400/50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-full bg-orange-500 px-12 py-3 text-base font-extrabold text-white shadow-lg transition-all hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {submitting ? "Submitting..." : "Submit"}
           </button>

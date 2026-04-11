@@ -86,6 +86,8 @@ export const authApi = {
   refresh: () => api("/auth/refresh", { method: "POST" }),
 
   logout: () => api("/auth/logout", { method: "POST" }),
+
+  team: () => api<{ members: { id: string; email: string; name: string; level: number; createdAt: string }[]; totalCount: number; calculatedLevel: number }>("/auth/team"),
 };
 
 // For multipart/form-data uploads (file uploads)
