@@ -9,6 +9,15 @@ export default function WalletPage() {
 
   return (
     <div className="mx-auto max-w-lg px-4 pt-6">
+      {/* Logo */}
+      <a href="/client/dashboard" className="h-44 flex items-center justify-center">
+        <img
+          src="https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775556882/fanta_logo_1_rchhe0.png"
+          alt="Fanta"
+          style={{ width: "300px", height: "150px", objectFit: "contain" }}
+        />
+      </a>
+
       {/* Balance Card */}
       <div className="rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 p-6 text-white shadow-lg">
         <p className="text-sm font-medium opacity-80">Available Balance</p>
