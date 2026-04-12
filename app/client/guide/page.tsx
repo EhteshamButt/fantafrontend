@@ -7,7 +7,7 @@ export default function GuidePage() {
       <img
         src="https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775556882/fanta_logo_1_rchhe0.png"
         alt="Fanta"
-        style={{ width: "320px", height: "150px", objectFit: " " }}
+        style={{ width: "320px", height: "150px" }}
         className="mb-10"
       />
 
