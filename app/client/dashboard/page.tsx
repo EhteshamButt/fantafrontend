@@ -112,7 +112,6 @@ const actionCards = [
 export default function ClientDashboard() {
   const router = useRouter();
   const user = useClientUser();
-  const [showWallet, setShowWallet] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const handleLogout = async () => {
@@ -176,21 +175,14 @@ export default function ClientDashboard() {
 
           {/* Show Wallet */}
           <button
-            onClick={() => setShowWallet(!showWallet)}
+            onClick={() => router.push("/client/wallet")}
             className="mt-3 flex items-center justify-center gap-2 text-lg font-medium text-white underline underline-offset-4 transition hover:text-orange-200"
           >
             Show Wallet
             <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-              {showWallet ? (
-                <path d="M12 4.5C7.305 4.5 3.257 7.61 1.5 12c1.757 4.39 5.805 7.5 10.5 7.5s8.743-3.11 10.5-7.5C20.743 7.61 16.695 4.5 12 4.5zm0 12.5a5 5 0 110-10 5 5 0 010 10zm0-8a3 3 0 100 6 3 3 0 000-6z" />
-              ) : (
-                <path d="M12 4.5C7.305 4.5 3.257 7.61 1.5 12c1.757 4.39 5.805 7.5 10.5 7.5s8.743-3.11 10.5-7.5C20.743 7.61 16.695 4.5 12 4.5zm0 12.5a5 5 0 110-10 5 5 0 010 10zm0-8a3 3 0 100 6 3 3 0 000-6z" />
-              )}
+              <path d="M12 4.5C7.305 4.5 3.257 7.61 1.5 12c1.757 4.39 5.805 7.5 10.5 7.5s8.743-3.11 10.5-7.5C20.743 7.61 16.695 4.5 12 4.5zm0 12.5a5 5 0 110-10 5 5 0 010 10zm0-8a3 3 0 100 6 3 3 0 000-6z" />
             </svg>
           </button>
-          {showWallet && (
-            <p className="mt-1 text-lg font-bold text-white">Rs {parseFloat(String(user?.walletBalance || 0)).toFixed(2)}</p>
-          )}
 
           {/* Copy Refer link */}
           <button
