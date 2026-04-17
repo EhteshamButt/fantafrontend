@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from 'next/navigation';
+import { paymentApi } from "@/lib/api";
 interface Package {
   id: string;
   name: string;
@@ -110,8 +111,14 @@ export default function UserDashboard() {
     setSubmitError("");
 
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const formData = new FormData();
+      formData.append("packageId", selectedPkg.id);
+      formData.append("packageName", selectedPkg.name);
+      formData.append("amount", String(selectedPkg.price));
+      formData.append("trxId", trxId.trim());
+      formData.append("senderNumber", senderNumber.trim());
+      formData.append("screenshot", screenshot);
+      await paymentApi.submit(formData);
 
       // Show success screen
       setPaymentSuccess(true);
