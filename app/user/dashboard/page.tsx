@@ -137,8 +137,6 @@ export default function UserDashboard() {
   };
 
   const handleBackToDashboard = () => {
-    setPaymentSuccess(false);
-    setSuccessPackage(null);
     router.push("/login");
   };
 
