@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { adminApi } from "@/lib/api";
 
 interface ApprovedUser {
@@ -28,6 +29,7 @@ function timeAgo(dateStr: string) {
 }
 
 export default function ApprovedUsersPage() {
+  const router = useRouter();
   const [users, setUsers] = useState<ApprovedUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -131,7 +133,10 @@ export default function ApprovedUsersPage() {
                       <td className="whitespace-nowrap px-4 py-3 text-gray-700">{u.level}</td>
                       <td className="whitespace-nowrap px-4 py-3 text-gray-700">{u.dailyLimit}</td>
                       <td className="whitespace-nowrap px-4 py-3">
-                        <button className="flex items-center gap-1.5 rounded-lg border border-indigo-300 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors">
+                        <button
+                          onClick={() => router.push(`/admin/approved-users/${u.id}`)}
+                          className="flex items-center gap-1.5 rounded-lg border border-indigo-300 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors"
+                        >
                           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                           </svg>

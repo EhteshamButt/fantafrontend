@@ -207,6 +207,32 @@ export const adminApi = {
 
   getApprovedUsers: () => api("/admin/users/approved"),
 
+  getUserDetail: (id: string) => api<{
+    user: { id: string; name: string; email: string; phone: string | null; role: string; walletBalance: number; level: number; dailyLimit: number; referralCode: string | null; referredBy: string | null; createdAt: string; updatedAt: string };
+    stats: { balance: number; totalDeposited: number; totalWithdrawn: number; totalTransactions: number; teamCount: number };
+  }>(`/admin/users/${id}`),
+
+  updateUserDetail: (id: string, data: { name?: string; email?: string; phone?: string; level?: number; dailyLimit?: number; referralCode?: string; walletBalance?: number }) =>
+    api(`/admin/users/${id}`, { method: "PUT", body: data }),
+
+  adjustBalance: (id: string, amount: number, type: "add" | "subtract") =>
+    api(`/admin/users/${id}/balance`, { method: "PATCH", body: { amount, type } }),
+
+  banUser: (id: string, reason: string) =>
+    api(`/admin/users/${id}/ban`, { method: "PATCH", body: { reason } }),
+
+  unbanUser: (id: string) =>
+    api(`/admin/users/${id}/unban`, { method: "PATCH" }),
+
+  getLoginHistory: (id: string) =>
+    api<{ id: string; userId: string; ip: string; browser: string; os: string; location: string | null; createdAt: string; user?: { name: string } }[]>(`/admin/users/${id}/logins`),
+
+  getNotifications: (id: string) =>
+    api<{ id: string; userId: string; subject: string; message: string; sentVia: string; createdAt: string; user?: { name: string } }[]>(`/admin/users/${id}/notifications`),
+
+  sendNotification: (id: string, data: { subject: string; message: string; sentVia?: string }) =>
+    api(`/admin/users/${id}/notifications`, { method: "POST", body: data }),
+
   getTodayApprovedUsers: () => api("/admin/users/today-approved"),
 
   getRejectedUsers: () => api("/admin/users/rejected"),
