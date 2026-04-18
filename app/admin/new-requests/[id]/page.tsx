@@ -29,6 +29,8 @@ export default function PaymentDetailPage() {
   const [loading, setLoading] = useState(true);
   const [actionId, setActionId] = useState<string | null>(null);
   const [imgError, setImgError] = useState(false);
+  const [rejectModal, setRejectModal] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
 
   const loadUserDetail = (p: PaymentRecord) => {
     if (p.userId) {
@@ -80,14 +82,29 @@ export default function PaymentDetailPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const handleAction = async (status: "approved" | "rejected" | "pending") => {
+  const handleAction = async (status: "approved" | "pending") => {
     if (!payment) return;
     setActionId(status);
     try {
       await adminApi.updatePaymentStatus(payment.id, status);
-      setPayment((prev) => prev ? { ...prev, status: status === "pending" ? "pending" : status } : prev);
+      setPayment((prev) => prev ? { ...prev, status } : prev);
     } catch {
       alert("Failed to update status.");
+    } finally {
+      setActionId(null);
+    }
+  };
+
+  const handleRejectSubmit = async () => {
+    if (!payment || !rejectReason.trim()) return;
+    setActionId("rejected");
+    try {
+      await adminApi.updatePaymentStatus(payment.id, "rejected");
+      setPayment((prev) => prev ? { ...prev, status: "rejected" } : prev);
+      setRejectModal(false);
+      setRejectReason("");
+    } catch {
+      alert("Failed to reject.");
     } finally {
       setActionId(null);
     }
@@ -278,7 +295,7 @@ export default function PaymentDetailPage() {
                     {actionId === "approved" ? "Approving..." : "Approve"}
                   </button>
                   <button
-                    onClick={() => handleAction("rejected")}
+                    onClick={() => setRejectModal(true)}
                     disabled={!!actionId}
                     className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-red-500 py-2.5 text-sm font-semibold text-white hover:bg-red-600 disabled:opacity-50 transition-colors"
                   >
@@ -315,6 +332,52 @@ export default function PaymentDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Reject Confirmation Modal */}
+      {rejectModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-md rounded-2xl bg-white shadow-xl">
+            <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+              <h3 className="text-base font-semibold text-gray-800">Reject Deposit Confirmation</h3>
+              <button
+                onClick={() => { setRejectModal(false); setRejectReason(""); }}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="px-6 py-5 space-y-4">
+              <p className="text-sm text-gray-600">
+                Are you sure to{" "}
+                <span className="font-semibold text-red-500">reject {payment.amount.toLocaleString("en-PK", { minimumFractionDigits: 2 })} Rs</span>{" "}
+                deposit of{" "}
+                <span className="font-semibold text-green-600">@{username}</span>?
+              </p>
+              <div>
+                <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+                  Reason for Rejection <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  rows={4}
+                  value={rejectReason}
+                  onChange={(e) => setRejectReason(e.target.value)}
+                  placeholder="Enter reason..."
+                  className="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-700 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
+                />
+              </div>
+              <button
+                onClick={handleRejectSubmit}
+                disabled={!!actionId || !rejectReason.trim()}
+                className="w-full rounded-xl bg-indigo-600 py-3 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+              >
+                {actionId === "rejected" ? "Rejecting..." : "Submit"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
