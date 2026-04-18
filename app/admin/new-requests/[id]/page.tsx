@@ -31,7 +31,6 @@ export default function PaymentDetailPage() {
   const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
-    // Try sessionStorage first (set by list page on navigate)
     const cached = sessionStorage.getItem(`payment_${id}`);
     if (cached) {
       try {
@@ -45,28 +44,11 @@ export default function PaymentDetailPage() {
             )
             .catch(() => {});
         }
-        setLoading(false);
-        return;
       } catch {
-        // fall through to API
+        // invalid cache — leave payment null
       }
     }
-    // Fallback: try API endpoint
-    adminApi
-      .getPaymentById(id)
-      .then((p) => {
-        setPayment(p);
-        if (p.userId) {
-          adminApi
-            .getUserDetail(p.userId)
-            .then(({ user }) =>
-              setUserDetail({ phone: user.phone, referredBy: user.referredBy })
-            )
-            .catch(() => {});
-        }
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
+    setLoading(false);
   }, [id]);
 
   const handleAction = async (status: "approved" | "rejected" | "pending") => {
@@ -96,10 +78,11 @@ export default function PaymentDetailPage() {
 
   if (!payment) {
     return (
-      <div className="rounded-xl bg-red-50 p-8 text-center">
-        <p className="text-red-600">Payment not found.</p>
-        <button onClick={() => router.back()} className="mt-3 rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white">
-          Go Back
+      <div className="rounded-xl bg-orange-50 p-8 text-center">
+        <p className="text-base font-semibold text-orange-600">Payment data not available</p>
+        <p className="mt-1 text-sm text-orange-400">Please open this page by clicking Details from the Pending Deposits list.</p>
+        <button onClick={() => router.push("/admin/new-requests")} className="mt-4 rounded-lg bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
+          Go to Pending Deposits
         </button>
       </div>
     );
