@@ -30,25 +30,54 @@ export default function PaymentDetailPage() {
   const [actionId, setActionId] = useState<string | null>(null);
   const [imgError, setImgError] = useState(false);
 
+  const loadUserDetail = (p: PaymentRecord) => {
+    if (p.userId) {
+      adminApi
+        .getUserDetail(p.userId)
+        .then(({ user }) =>
+          setUserDetail({ phone: user.phone, referredBy: user.referredBy })
+        )
+        .catch(() => {});
+    }
+  };
+
   useEffect(() => {
+    // 1. Try sessionStorage
     const cached = sessionStorage.getItem(`payment_${id}`);
     if (cached) {
       try {
         const p: PaymentRecord = JSON.parse(cached);
         setPayment(p);
-        if (p.userId) {
-          adminApi
-            .getUserDetail(p.userId)
-            .then(({ user }) =>
-              setUserDetail({ phone: user.phone, referredBy: user.referredBy })
-            )
-            .catch(() => {});
-        }
-      } catch {
-        // invalid cache — leave payment null
-      }
+        loadUserDetail(p);
+        setLoading(false);
+        return;
+      } catch { /* fall through */ }
     }
-    setLoading(false);
+
+    // 2. Fallback: fetch pending list and find by ID
+    adminApi
+      .getPendingPayments()
+      .then((list) => {
+        const found = list.find((p) => p.id === id);
+        if (found) {
+          sessionStorage.setItem(`payment_${id}`, JSON.stringify(found));
+          setPayment(found);
+          loadUserDetail(found);
+        } else {
+          // 3. Try all payments (page 1, large limit)
+          return adminApi.getAllPayments(1, 200).then(({ payments }) => {
+            const p = payments.find((x) => x.id === id);
+            if (p) {
+              sessionStorage.setItem(`payment_${id}`, JSON.stringify(p));
+              setPayment(p);
+              loadUserDetail(p);
+            }
+          });
+        }
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleAction = async (status: "approved" | "rejected" | "pending") => {

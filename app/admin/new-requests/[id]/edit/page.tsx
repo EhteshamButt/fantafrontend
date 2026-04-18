@@ -17,27 +17,51 @@ export default function PaymentEditPage() {
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState("");
 
+  const applyPayment = (p: PaymentRecord) => {
+    setPayment(p);
+    setGatewayName(p.packageName || "");
+    setTrxId(p.trxId || "");
+    setAmount(p.amount?.toString() || "");
+    setSelectedPlan(p.packageId || "");
+    if (p.userId) {
+      adminApi
+        .getUserDetail(p.userId)
+        .then(({ user }) => setPhone(user.phone || ""))
+        .catch(() => {});
+    }
+  };
+
   useEffect(() => {
+    // 1. Try sessionStorage
     const cached = sessionStorage.getItem(`payment_${id}`);
     if (cached) {
       try {
-        const p: PaymentRecord = JSON.parse(cached);
-        setPayment(p);
-        setGatewayName(p.packageName || "");
-        setTrxId(p.trxId || "");
-        setAmount(p.amount?.toString() || "");
-        setSelectedPlan(p.packageId || "");
-        // fetch phone
-        if (p.userId) {
-          adminApi
-            .getUserDetail(p.userId)
-            .then(({ user }) => setPhone(user.phone || ""))
-            .catch(() => {});
-        }
-      } catch {
-        // invalid cache
-      }
+        applyPayment(JSON.parse(cached));
+        return;
+      } catch { /* fall through */ }
     }
+
+    // 2. Fallback: fetch pending list and find by ID
+    adminApi
+      .getPendingPayments()
+      .then((list) => {
+        const found = list.find((p) => p.id === id);
+        if (found) {
+          sessionStorage.setItem(`payment_${id}`, JSON.stringify(found));
+          applyPayment(found);
+        } else {
+          // 3. Try all payments (page 1, large limit)
+          return adminApi.getAllPayments(1, 200).then(({ payments }) => {
+            const p = payments.find((x) => x.id === id);
+            if (p) {
+              sessionStorage.setItem(`payment_${id}`, JSON.stringify(p));
+              applyPayment(p);
+            }
+          });
+        }
+      })
+      .catch(console.error);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleUpdate = async () => {
