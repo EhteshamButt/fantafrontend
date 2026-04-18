@@ -260,6 +260,9 @@ export const adminApi = {
 
   getUserDeposits: (id: string) =>
     api<PaymentRecord[]>(`/admin/users/${id}/deposits`),
+
+  getUserWithdrawals: (id: string) =>
+    api<WithdrawalRecord[]>(`/admin/users/${id}/withdrawals`),
 };
 
 export interface TransactionRecord {

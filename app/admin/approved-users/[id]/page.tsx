@@ -272,7 +272,7 @@ export default function UserDetailPage() {
           {[
             { label: "Balance", value: `Rs ${Number(stats.balance).toLocaleString("en-PK", { minimumFractionDigits: 2 })}`, bg: "bg-indigo-600", href: `/admin/approved-users/${id}/transactions` },
             { label: "Deposits", value: `Rs ${stats.totalDeposited.toLocaleString("en-PK", { minimumFractionDigits: 2 })}`, bg: "bg-blue-500", href: `/admin/approved-users/${id}/deposits` },
-            { label: "Withdrawals", value: `Rs ${stats.totalWithdrawn.toLocaleString("en-PK", { minimumFractionDigits: 2 })}`, bg: "bg-teal-600", href: null },
+            { label: "Withdrawals", value: `Rs ${stats.totalWithdrawn.toLocaleString("en-PK", { minimumFractionDigits: 2 })}`, bg: "bg-teal-600", href: `/admin/approved-users/${id}/withdrawals` },
             { label: "Transactions", value: stats.totalTransactions.toString(), bg: "bg-blue-700", href: `/admin/approved-users/${id}/transactions` },
           ].map((card) => (
             <div key={card.label} className={`rounded-xl ${card.bg} p-5 text-white shadow-sm`}>
