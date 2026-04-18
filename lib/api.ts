@@ -254,7 +254,26 @@ export const adminApi = {
 
   updateWithdrawalStatus: (id: string, status: string) =>
     api(`/withdrawals/${id}/status`, { method: "PATCH", body: { status } }),
+
+  getUserTransactions: (id: string) =>
+    api<TransactionRecord[]>(`/admin/users/${id}/transactions`),
+
+  getUserDeposits: (id: string) =>
+    api<PaymentRecord[]>(`/admin/users/${id}/deposits`),
 };
+
+export interface TransactionRecord {
+  id: string;
+  trxId: string;
+  userId: string;
+  user?: { id: string; name: string; email: string; referralCode?: string | null };
+  type: "credit" | "debit";
+  amount: number;
+  postBalance: number;
+  detail: string;
+  referredBy?: { id: string; name: string; email: string; referralCode?: string | null } | null;
+  createdAt: string;
+}
 
 export interface ReferralSettingRecord {
   id: string;

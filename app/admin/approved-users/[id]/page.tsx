@@ -270,15 +270,19 @@ export default function UserDetailPage() {
         {/* Stat Cards */}
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {[
-            { label: "Balance", value: `Rs ${Number(stats.balance).toLocaleString("en-PK", { minimumFractionDigits: 2 })}`, bg: "bg-indigo-600" },
-            { label: "Deposits", value: `Rs ${stats.totalDeposited.toLocaleString("en-PK", { minimumFractionDigits: 2 })}`, bg: "bg-blue-500" },
-            { label: "Withdrawals", value: `Rs ${stats.totalWithdrawn.toLocaleString("en-PK", { minimumFractionDigits: 2 })}`, bg: "bg-teal-600" },
-            { label: "Transactions", value: stats.totalTransactions.toString(), bg: "bg-blue-700" },
+            { label: "Balance", value: `Rs ${Number(stats.balance).toLocaleString("en-PK", { minimumFractionDigits: 2 })}`, bg: "bg-indigo-600", href: `/admin/approved-users/${id}/transactions` },
+            { label: "Deposits", value: `Rs ${stats.totalDeposited.toLocaleString("en-PK", { minimumFractionDigits: 2 })}`, bg: "bg-blue-500", href: `/admin/approved-users/${id}/deposits` },
+            { label: "Withdrawals", value: `Rs ${stats.totalWithdrawn.toLocaleString("en-PK", { minimumFractionDigits: 2 })}`, bg: "bg-teal-600", href: null },
+            { label: "Transactions", value: stats.totalTransactions.toString(), bg: "bg-blue-700", href: `/admin/approved-users/${id}/transactions` },
           ].map((card) => (
             <div key={card.label} className={`rounded-xl ${card.bg} p-5 text-white shadow-sm`}>
               <p className="text-xl font-bold">{card.value}</p>
               <p className="mt-1 text-xs font-medium text-white/80">{card.label}</p>
-              <button className="mt-2 text-xs font-medium text-white/70 hover:text-white">View All</button>
+              {card.href ? (
+                <button onClick={() => router.push(card.href!)} className="mt-2 text-xs font-medium text-white/70 hover:text-white">View All</button>
+              ) : (
+                <button className="mt-2 text-xs font-medium text-white/70 hover:text-white">View All</button>
+              )}
             </div>
           ))}
         </div>
