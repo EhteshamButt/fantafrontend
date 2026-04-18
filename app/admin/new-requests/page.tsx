@@ -175,7 +175,7 @@ export default function NewRequestsPage() {
                         </td>
                         <td className="px-4 py-3">
                           <button
-                            onClick={() => router.push(`/admin/new-requests/${p.id}`)}
+                            onClick={() => { sessionStorage.setItem(`payment_${p.id}`, JSON.stringify(p)); router.push(`/admin/new-requests/${p.id}`); }}
                             className="flex items-center gap-1 rounded-lg border border-indigo-300 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors"
                           >
                             <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

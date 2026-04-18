@@ -31,11 +31,31 @@ export default function PaymentDetailPage() {
   const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
+    // Try sessionStorage first (set by list page on navigate)
+    const cached = sessionStorage.getItem(`payment_${id}`);
+    if (cached) {
+      try {
+        const p: PaymentRecord = JSON.parse(cached);
+        setPayment(p);
+        if (p.userId) {
+          adminApi
+            .getUserDetail(p.userId)
+            .then(({ user }) =>
+              setUserDetail({ phone: user.phone, referredBy: user.referredBy })
+            )
+            .catch(() => {});
+        }
+        setLoading(false);
+        return;
+      } catch {
+        // fall through to API
+      }
+    }
+    // Fallback: try API endpoint
     adminApi
       .getPaymentById(id)
       .then((p) => {
         setPayment(p);
-        // Also fetch user detail for phone + referredBy
         if (p.userId) {
           adminApi
             .getUserDetail(p.userId)
