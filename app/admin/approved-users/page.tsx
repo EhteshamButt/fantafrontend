@@ -47,6 +47,7 @@ const columns = [
 export default function ApprovedUsersPage() {
   const [users, setUsers] = useState<ApprovedUser[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     adminApi
@@ -56,17 +57,30 @@ export default function ApprovedUsersPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const filtered = users.filter(
+    (u) =>
+      u.name.toLowerCase().includes(search.toLowerCase()) ||
+      u.email.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-800">All Approved Users</h1>
         <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
-          {users.length} users
+          {filtered.length} users
         </span>
       </div>
+      <input
+        type="text"
+        placeholder="Search by name or email..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-700 shadow-sm outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+      />
       <DataTable
         columns={columns}
-        data={users}
+        data={filtered}
         loading={loading}
         emptyMessage="No approved users yet"
       />
