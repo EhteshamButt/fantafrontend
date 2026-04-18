@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { adminApi, PaymentRecord } from "@/lib/api";
-import ScreenshotModal from "../../components/ScreenshotModal";
+import ScreenshotModal from "../../../components/ScreenshotModal";
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
