@@ -233,6 +233,9 @@ export const adminApi = {
   sendNotification: (id: string, data: { subject: string; message: string; sentVia?: string }) =>
     api(`/admin/users/${id}/notifications`, { method: "POST", body: data }),
 
+  impersonateUser: (id: string) =>
+    api<{ accessToken: string; user: { id: string; name: string; email: string; role: string } }>(`/admin/users/${id}/impersonate`, { method: "POST" }),
+
   getTodayApprovedUsers: () => api("/admin/users/today-approved"),
 
   getRejectedUsers: () => api("/admin/users/rejected"),

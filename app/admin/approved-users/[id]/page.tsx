@@ -154,6 +154,19 @@ export default function UserDetailPage() {
     }
   };
 
+  const handleLoginAsUser = async () => {
+    try {
+      const { accessToken } = await adminApi.impersonateUser(id);
+      // Save admin token so we can restore it later
+      const adminToken = localStorage.getItem("access_token");
+      if (adminToken) localStorage.setItem("admin_token", adminToken);
+      localStorage.setItem("access_token", accessToken);
+      router.push("/user/dashboard");
+    } catch {
+      alert("Failed to login as user.");
+    }
+  };
+
   if (loading) {
     return (
       <div className="animate-pulse space-y-3">
@@ -288,7 +301,7 @@ export default function UserDetailPage() {
             <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
             Notifications
           </button>
-          <button className="flex items-center gap-1.5 rounded-lg border border-indigo-300 bg-white px-4 py-2 text-xs font-semibold text-indigo-600 hover:bg-indigo-50">
+          <button onClick={handleLoginAsUser} className="flex items-center gap-1.5 rounded-lg border border-indigo-300 bg-white px-4 py-2 text-xs font-semibold text-indigo-600 hover:bg-indigo-50">
             <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
             Login as User
           </button>

@@ -26,11 +26,25 @@ function formatPrice(price: number) {
 
 export default function UserDashboard() {
   const router = useRouter();
+  const [isImpersonating, setIsImpersonating] = useState(false);
+
+  useEffect(() => {
+    setIsImpersonating(!!localStorage.getItem("admin_token"));
+  }, []);
+
+  const handleReturnToAdmin = () => {
+    const adminToken = localStorage.getItem("admin_token");
+    if (adminToken) {
+      localStorage.setItem("access_token", adminToken);
+      localStorage.removeItem("admin_token");
+    }
+    router.push("/admin/dashboard");
+  };
 
   const handleLogout = () => {
     // 1. Remove the token
     localStorage.removeItem("access_token");
-    
+
     // 2. Redirect to the login page
     // Note: In Next.js, use router.push() for internal navigation
     router.push('/login');
@@ -251,6 +265,18 @@ export default function UserDashboard() {
   // Dashboard Screen
   return (
     <div className="flex min-h-screen flex-col bg-[#0a1628]">
+      {/* Admin impersonation banner */}
+      {isImpersonating && (
+        <div className="flex items-center justify-between bg-amber-500 px-4 py-2 text-sm font-semibold text-white">
+          <span>⚠ You are viewing this dashboard as a user (Admin mode)</span>
+          <button
+            onClick={handleReturnToAdmin}
+            className="rounded-lg bg-white px-3 py-1 text-xs font-bold text-amber-600 hover:bg-amber-50"
+          >
+            Return to Admin
+          </button>
+        </div>
+      )}
       {/* Logout button fixed top-right */}
       <button
         onClick={handleLogout}
