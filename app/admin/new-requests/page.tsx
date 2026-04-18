@@ -62,9 +62,10 @@ export default function NewRequestsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      {/* Header */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-bold text-gray-800">New User Requests</h1>
-        <span className="rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-700">
+        <span className="w-fit rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-700">
           {filtered.length} pending
         </span>
       </div>
@@ -107,62 +108,144 @@ export default function NewRequestsPage() {
           </p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl bg-white shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500">User</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500">Package</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500">Amount</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500">TRX ID</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500">Sender #</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500">Screenshot</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500">Date</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {filtered.map((p) => (
-                  <tr key={p.id} className="transition-colors hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <div>
-                        <p className="font-medium text-gray-800">
-                          {p.user?.name || "Unknown"}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {p.user?.email || ""}
-                        </p>
+        <>
+          {/* ── Desktop table (md+) ── */}
+          <div className="hidden md:block overflow-hidden rounded-xl bg-white shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="bg-indigo-600 text-white">
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">User</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Package</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Amount</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">TRX ID</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Sender #</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Screenshot</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Date</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {filtered.map((p) => (
+                    <tr key={p.id} className="transition-colors hover:bg-gray-50">
+                      <td className="px-4 py-3">
+                        <div>
+                          <p className="font-medium text-gray-800">
+                            {p.user?.name || "Unknown"}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {p.user?.email || ""}
+                          </p>
+                        </div>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3 text-gray-700">
+                        {p.packageName}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3 font-medium text-gray-800">
+                        Rs{p.amount.toLocaleString("en-PK")}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3 font-mono text-xs text-gray-600">
+                        {p.trxId}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3 text-gray-700">
+                        {p.senderNumber}
+                      </td>
+                      <td className="px-4 py-3">
+                        <button
+                          onClick={() => setScreenshotUrl(p.screenshotUrl)}
+                          className="rounded bg-blue-50 px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-100 transition-colors"
+                        >
+                          View
+                        </button>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3 text-xs text-gray-500">
+                        {new Date(p.createdAt).toLocaleDateString("en-PK", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleAction(p.id, "approved")}
+                            disabled={actionId === p.id}
+                            className="rounded-lg bg-green-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-green-600 disabled:opacity-50"
+                          >
+                            {actionId === p.id ? "..." : "Approve"}
+                          </button>
+                          <button
+                            onClick={() => handleAction(p.id, "rejected")}
+                            disabled={actionId === p.id}
+                            className="rounded-lg bg-red-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-red-600 disabled:opacity-50"
+                          >
+                            {actionId === p.id ? "..." : "Reject"}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* ── Mobile cards (< md) ── */}
+          <div className="flex flex-col gap-3 md:hidden">
+            {filtered.map((p) => (
+              <div key={p.id} className="overflow-hidden rounded-xl bg-white shadow-sm">
+                {[
+                  {
+                    label: "User",
+                    value: (
+                      <div className="text-right">
+                        <p className="font-medium text-gray-800">{p.user?.name || "Unknown"}</p>
+                        <p className="text-xs text-gray-400">{p.user?.email || ""}</p>
                       </div>
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-gray-700">
-                      {p.packageName}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 font-medium text-gray-800">
-                      Rs{p.amount.toLocaleString("en-PK")}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 font-mono text-xs text-gray-600">
-                      {p.trxId}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-gray-700">
-                      {p.senderNumber}
-                    </td>
-                    <td className="px-4 py-3">
+                    ),
+                  },
+                  {
+                    label: "Package",
+                    value: <span className="text-gray-700">{p.packageName}</span>,
+                  },
+                  {
+                    label: "Amount",
+                    value: <span className="font-semibold text-gray-800">Rs{p.amount.toLocaleString("en-PK")}</span>,
+                  },
+                  {
+                    label: "TRX ID",
+                    value: <span className="font-mono text-xs text-gray-600">{p.trxId}</span>,
+                  },
+                  {
+                    label: "Sender #",
+                    value: <span className="text-gray-700">{p.senderNumber}</span>,
+                  },
+                  {
+                    label: "Screenshot",
+                    value: (
                       <button
                         onClick={() => setScreenshotUrl(p.screenshotUrl)}
                         className="rounded bg-blue-50 px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-100 transition-colors"
                       >
                         View
                       </button>
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-xs text-gray-500">
-                      {new Date(p.createdAt).toLocaleDateString("en-PK", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </td>
-                    <td className="px-4 py-3">
+                    ),
+                  },
+                  {
+                    label: "Date",
+                    value: (
+                      <span className="text-xs text-gray-500">
+                        {new Date(p.createdAt).toLocaleDateString("en-PK", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </span>
+                    ),
+                  },
+                  {
+                    label: "Actions",
+                    value: (
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleAction(p.id, "approved")}
@@ -179,13 +262,18 @@ export default function NewRequestsPage() {
                           {actionId === p.id ? "..." : "Reject"}
                         </button>
                       </div>
-                    </td>
-                  </tr>
+                    ),
+                  },
+                ].map((row, i) => (
+                  <div key={i} className="flex items-center justify-between border-b border-gray-100 px-4 py-3 last:border-0">
+                    <span className="text-sm font-bold text-gray-800">{row.label}</span>
+                    <div className="text-sm">{row.value}</div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            ))}
           </div>
-        </div>
+        </>
       )}
 
       {screenshotUrl && (
