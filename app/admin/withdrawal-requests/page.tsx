@@ -75,9 +75,9 @@ export default function WithdrawalRequestsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-bold text-gray-800">Pending Withdrawals</h1>
-        <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-semibold text-purple-700">
+        <span className="w-fit rounded-full bg-purple-100 px-3 py-1 text-sm font-semibold text-purple-700">
           {filtered.length} pending
         </span>
       </div>
@@ -118,64 +118,151 @@ export default function WithdrawalRequestsPage() {
           <p className="mt-3 text-sm font-medium text-gray-500">No pending withdrawal requests</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl bg-white shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="bg-purple-600 text-white">
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Gateway | Transaction</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Initiated</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">User</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Amount</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Conversion</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Status</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {filtered.map((w) => (
-                  <tr key={w.id} className="transition-colors hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <p className="font-semibold text-blue-600">{formatMethod(w.method)}</p>
-                      <p className="font-mono text-xs text-gray-500">{w.trxId}</p>
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3">
-                      <p className="text-sm text-gray-700">
-                        {new Date(w.createdAt).toLocaleString("en-PK", {
-                          year: "numeric",
-                          month: "2-digit",
-                          day: "2-digit",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                      <p className="text-xs text-gray-400">{timeAgo(w.createdAt)}</p>
-                    </td>
-                    <td className="px-4 py-3">
-                      <p className="font-medium text-blue-600">
-                        @{w.user?.name || "unknown"}
-                      </p>
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3">
-                      <p className="text-sm text-gray-700">
-                        Rs{w.amount.toLocaleString("en-PK", { minimumFractionDigits: 2 })} - 0.00
-                      </p>
-                      <p className="text-xs font-semibold text-gray-800">
-                        {w.amount.toLocaleString("en-PK", { minimumFractionDigits: 2 })} Rs
-                      </p>
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3">
-                      <p className="text-sm text-gray-700">1 Rs = 1.00 PKR</p>
-                      <p className="text-xs font-semibold text-gray-800">
-                        {w.amount.toLocaleString("en-PK", { minimumFractionDigits: 2 })} PKR
-                      </p>
-                    </td>
-                    <td className="px-4 py-3">
+        <>
+          {/* ── Desktop table (md+) ── */}
+          <div className="hidden md:block overflow-hidden rounded-xl bg-white shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="bg-purple-600 text-white">
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Gateway | Transaction</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Initiated</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">User</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Amount</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Conversion</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Status</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {filtered.map((w) => (
+                    <tr key={w.id} className="transition-colors hover:bg-gray-50">
+                      <td className="px-4 py-3">
+                        <p className="font-semibold text-blue-600">{formatMethod(w.method)}</p>
+                        <p className="font-mono text-xs text-gray-500">{w.trxId}</p>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3">
+                        <p className="text-sm text-gray-700">
+                          {new Date(w.createdAt).toLocaleString("en-PK", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                        <p className="text-xs text-gray-400">{timeAgo(w.createdAt)}</p>
+                      </td>
+                      <td className="px-4 py-3">
+                        <p className="font-medium text-blue-600">
+                          @{w.user?.name || "unknown"}
+                        </p>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3">
+                        <p className="text-sm text-gray-700">
+                          Rs{w.amount.toLocaleString("en-PK", { minimumFractionDigits: 2 })} - 0.00
+                        </p>
+                        <p className="text-xs font-semibold text-gray-800">
+                          {w.amount.toLocaleString("en-PK", { minimumFractionDigits: 2 })} Rs
+                        </p>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3">
+                        <p className="text-sm text-gray-700">1 Rs = 1.00 PKR</p>
+                        <p className="text-xs font-semibold text-gray-800">
+                          {w.amount.toLocaleString("en-PK", { minimumFractionDigits: 2 })} PKR
+                        </p>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="rounded-full border border-orange-300 bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-600">
+                          Pending
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleAction(w.id, "approved")}
+                            disabled={actionId === w.id}
+                            className="rounded-lg bg-green-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-green-600 disabled:opacity-50"
+                          >
+                            {actionId === w.id ? "..." : "Approve"}
+                          </button>
+                          <button
+                            onClick={() => handleAction(w.id, "rejected")}
+                            disabled={actionId === w.id}
+                            className="rounded-lg bg-red-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-red-600 disabled:opacity-50"
+                          >
+                            {actionId === w.id ? "..." : "Reject"}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* ── Mobile cards (< md) ── */}
+          <div className="flex flex-col gap-3 md:hidden">
+            {filtered.map((w) => (
+              <div key={w.id} className="overflow-hidden rounded-xl bg-white shadow-sm">
+                {[
+                  {
+                    label: "Gateway",
+                    value: (
+                      <div className="text-right">
+                        <p className="font-semibold text-blue-600">{formatMethod(w.method)}</p>
+                        <p className="font-mono text-xs text-gray-500">{w.trxId}</p>
+                      </div>
+                    ),
+                  },
+                  {
+                    label: "Initiated",
+                    value: (
+                      <div className="text-right">
+                        <p className="text-gray-700">
+                          {new Date(w.createdAt).toLocaleString("en-PK", {
+                            year: "numeric", month: "2-digit", day: "2-digit",
+                            hour: "2-digit", minute: "2-digit",
+                          })}
+                        </p>
+                        <p className="text-xs text-gray-400">{timeAgo(w.createdAt)}</p>
+                      </div>
+                    ),
+                  },
+                  {
+                    label: "User",
+                    value: <span className="font-medium text-blue-600">@{w.user?.name || "unknown"}</span>,
+                  },
+                  {
+                    label: "Amount",
+                    value: (
+                      <div className="text-right">
+                        <p className="text-gray-700">Rs{w.amount.toLocaleString("en-PK", { minimumFractionDigits: 2 })} - 0.00</p>
+                        <p className="text-xs font-semibold text-gray-800">{w.amount.toLocaleString("en-PK", { minimumFractionDigits: 2 })} Rs</p>
+                      </div>
+                    ),
+                  },
+                  {
+                    label: "Conversion",
+                    value: (
+                      <div className="text-right">
+                        <p className="text-gray-700">1 Rs = 1.00 PKR</p>
+                        <p className="text-xs font-semibold text-gray-800">{w.amount.toLocaleString("en-PK", { minimumFractionDigits: 2 })} PKR</p>
+                      </div>
+                    ),
+                  },
+                  {
+                    label: "Status",
+                    value: (
                       <span className="rounded-full border border-orange-300 bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-600">
                         Pending
                       </span>
-                    </td>
-                    <td className="px-4 py-3">
+                    ),
+                  },
+                  {
+                    label: "Action",
+                    value: (
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleAction(w.id, "approved")}
@@ -192,13 +279,18 @@ export default function WithdrawalRequestsPage() {
                           {actionId === w.id ? "..." : "Reject"}
                         </button>
                       </div>
-                    </td>
-                  </tr>
+                    ),
+                  },
+                ].map((row, i) => (
+                  <div key={i} className="flex items-center justify-between border-b border-gray-100 px-4 py-3 last:border-0">
+                    <span className="text-sm font-bold text-gray-800">{row.label}</span>
+                    <div className="text-sm">{row.value}</div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            ))}
           </div>
-        </div>
+        </>
       )}
     </div>
   );

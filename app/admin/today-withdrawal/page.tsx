@@ -108,7 +108,7 @@ export default function TodayWithdrawalPage() {
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Today Approved Withdrawals</h1>
           <p className="text-sm text-gray-500">
@@ -122,7 +122,7 @@ export default function TodayWithdrawalPage() {
         </div>
         <button
           onClick={fetchData}
-          className="flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-700"
+          className="flex w-fit items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-700"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -191,71 +191,148 @@ export default function TodayWithdrawalPage() {
           <p className="mt-3 text-sm font-medium text-gray-500">No approved withdrawals today</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl bg-white shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="bg-green-600 text-white">
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">#</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Gateway | Transaction</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Approved At</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">User</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Amount</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {filtered.map((w, index) => (
-                  <tr key={w.id} className="transition-colors hover:bg-gray-50">
-                    <td className="px-4 py-3 text-xs text-gray-400">{index + 1}</td>
-                    <td className="px-4 py-3">
-                      <p className="font-semibold text-blue-600">{formatMethod(w.method)}</p>
-                      <p className="font-mono text-xs text-gray-500">{w.trxId}</p>
+        <>
+          {/* ── Desktop table (md+) ── */}
+          <div className="hidden md:block overflow-hidden rounded-xl bg-white shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="bg-green-600 text-white">
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">#</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Gateway | Transaction</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Approved At</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">User</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Amount</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {filtered.map((w, index) => (
+                    <tr key={w.id} className="transition-colors hover:bg-gray-50">
+                      <td className="px-4 py-3 text-xs text-gray-400">{index + 1}</td>
+                      <td className="px-4 py-3">
+                        <p className="font-semibold text-blue-600">{formatMethod(w.method)}</p>
+                        <p className="font-mono text-xs text-gray-500">{w.trxId}</p>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3">
+                        <p className="text-sm text-gray-700">
+                          {new Date(w.updatedAt).toLocaleString("en-PK", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                        <p className="text-xs text-gray-400">{timeAgo(w.updatedAt)}</p>
+                      </td>
+                      <td className="px-4 py-3">
+                        <p className="font-medium text-blue-600">@{w.user?.name || "unknown"}</p>
+                        <p className="text-xs text-gray-400">{w.user?.email || ""}</p>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3">
+                        <p className="text-sm font-semibold text-gray-800">
+                          Rs {w.amount.toLocaleString("en-PK", { minimumFractionDigits: 2 })}
+                        </p>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="rounded-full border border-green-300 bg-green-50 px-3 py-1 text-xs font-semibold text-green-600">
+                          Approved
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                {/* Footer total row */}
+                <tfoot>
+                  <tr className="bg-gray-50">
+                    <td colSpan={4} className="px-4 py-3 text-right text-sm font-semibold text-gray-600">
+                      Total Paid Out Today:
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3">
-                      <p className="text-sm text-gray-700">
-                        {new Date(w.updatedAt).toLocaleString("en-PK", {
-                          year: "numeric",
-                          month: "2-digit",
-                          day: "2-digit",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                      <p className="text-xs text-gray-400">{timeAgo(w.updatedAt)}</p>
+                    <td className="whitespace-nowrap px-4 py-3 text-sm font-bold text-green-700">
+                      Rs {totalAmount.toLocaleString("en-PK", { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="px-4 py-3">
-                      <p className="font-medium text-blue-600">@{w.user?.name || "unknown"}</p>
-                      <p className="text-xs text-gray-400">{w.user?.email || ""}</p>
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3">
-                      <p className="text-sm font-semibold text-gray-800">
+                    <td />
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+          {/* ── Mobile cards (< md) ── */}
+          <div className="flex flex-col gap-3 md:hidden">
+            {filtered.map((w, index) => (
+              <div key={w.id} className="overflow-hidden rounded-xl bg-white shadow-sm">
+                {[
+                  {
+                    label: "#",
+                    value: <span className="text-xs text-gray-400">{index + 1}</span>,
+                  },
+                  {
+                    label: "Gateway",
+                    value: (
+                      <div className="text-right">
+                        <p className="font-semibold text-blue-600">{formatMethod(w.method)}</p>
+                        <p className="font-mono text-xs text-gray-500">{w.trxId}</p>
+                      </div>
+                    ),
+                  },
+                  {
+                    label: "Approved At",
+                    value: (
+                      <div className="text-right">
+                        <p className="text-gray-700">
+                          {new Date(w.updatedAt).toLocaleString("en-PK", {
+                            year: "numeric", month: "2-digit", day: "2-digit",
+                            hour: "2-digit", minute: "2-digit",
+                          })}
+                        </p>
+                        <p className="text-xs text-gray-400">{timeAgo(w.updatedAt)}</p>
+                      </div>
+                    ),
+                  },
+                  {
+                    label: "User",
+                    value: (
+                      <div className="text-right">
+                        <p className="font-medium text-blue-600">@{w.user?.name || "unknown"}</p>
+                        <p className="text-xs text-gray-400">{w.user?.email || ""}</p>
+                      </div>
+                    ),
+                  },
+                  {
+                    label: "Amount",
+                    value: (
+                      <span className="font-semibold text-gray-800">
                         Rs {w.amount.toLocaleString("en-PK", { minimumFractionDigits: 2 })}
-                      </p>
-                    </td>
-                    <td className="px-4 py-3">
+                      </span>
+                    ),
+                  },
+                  {
+                    label: "Status",
+                    value: (
                       <span className="rounded-full border border-green-300 bg-green-50 px-3 py-1 text-xs font-semibold text-green-600">
                         Approved
                       </span>
-                    </td>
-                  </tr>
+                    ),
+                  },
+                ].map((row, i) => (
+                  <div key={i} className="flex items-center justify-between border-b border-gray-100 px-4 py-3 last:border-0">
+                    <span className="text-sm font-bold text-gray-800">{row.label}</span>
+                    <div className="text-sm">{row.value}</div>
+                  </div>
                 ))}
-              </tbody>
-              {/* Footer total row */}
-              <tfoot>
-                <tr className="bg-gray-50">
-                  <td colSpan={4} className="px-4 py-3 text-right text-sm font-semibold text-gray-600">
-                    Total Paid Out Today:
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm font-bold text-green-700">
-                    Rs {totalAmount.toLocaleString("en-PK", { minimumFractionDigits: 2 })}
-                  </td>
-                  <td />
-                </tr>
-              </tfoot>
-            </table>
+              </div>
+            ))}
+            {/* Mobile total */}
+            <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 shadow-sm">
+              <span className="text-sm font-semibold text-gray-600">Total Paid Out Today:</span>
+              <span className="text-sm font-bold text-green-700">
+                Rs {totalAmount.toLocaleString("en-PK", { minimumFractionDigits: 2 })}
+              </span>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
