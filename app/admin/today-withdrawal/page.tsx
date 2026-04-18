@@ -32,6 +32,7 @@ export default function TodayWithdrawalPage() {
   const [withdrawals, setWithdrawals] = useState<WithdrawalRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
 
   const fetchData = () => {
     setLoading(true);
@@ -55,6 +56,17 @@ export default function TodayWithdrawalPage() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const filtered = withdrawals.filter((w) => {
+    const q = search.toLowerCase();
+    return (
+      !q ||
+      w.user?.name.toLowerCase().includes(q) ||
+      w.user?.email?.toLowerCase().includes(q) ||
+      w.trxId.toLowerCase().includes(q) ||
+      w.method.toLowerCase().includes(q)
+    );
+  });
 
   const totalAmount = withdrawals.reduce((sum, w) => sum + w.amount, 0);
 
@@ -137,8 +149,24 @@ export default function TodayWithdrawalPage() {
         </div>
       </div>
 
+      {/* Search Bar */}
+      <div className="flex overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <input
+          type="text"
+          placeholder="Email / Username / TRX ID"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="flex-1 px-5 py-3 text-sm text-gray-500 outline-none placeholder:text-gray-400"
+        />
+        <button className="flex items-center justify-center bg-indigo-600 px-5 hover:bg-indigo-700 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
+          </svg>
+        </button>
+      </div>
+
       {/* Table */}
-      {withdrawals.length === 0 ? (
+      {filtered.length === 0 ? (
         <div className="rounded-xl bg-white p-12 text-center shadow-sm">
           <svg className="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -160,7 +188,7 @@ export default function TodayWithdrawalPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {withdrawals.map((w, index) => (
+                {filtered.map((w, index) => (
                   <tr key={w.id} className="transition-colors hover:bg-gray-50">
                     <td className="px-4 py-3 text-xs text-gray-400">{index + 1}</td>
                     <td className="px-4 py-3">
