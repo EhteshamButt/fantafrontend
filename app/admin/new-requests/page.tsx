@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { adminApi, PaymentRecord } from "@/lib/api";
-import ScreenshotModal from "../components/ScreenshotModal";
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -16,10 +16,9 @@ function timeAgo(dateStr: string) {
 }
 
 export default function NewRequestsPage() {
+  const router = useRouter();
   const [payments, setPayments] = useState<PaymentRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const [actionId, setActionId] = useState<string | null>(null);
-  const [screenshotUrl, setScreenshotUrl] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -31,19 +30,6 @@ export default function NewRequestsPage() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
-
-  const handleAction = async (id: string, status: "approved" | "rejected") => {
-    setActionId(id);
-    try {
-      await adminApi.updatePaymentStatus(id, status);
-      setPayments((prev) => prev.filter((p) => p.id !== id));
-    } catch (err) {
-      console.error(err);
-      alert("Failed to update payment status");
-    } finally {
-      setActionId(null);
-    }
-  };
 
   const filtered = payments.filter((p) => {
     const q = search.toLowerCase();
@@ -86,7 +72,6 @@ export default function NewRequestsPage() {
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
                 className="text-sm text-gray-500 outline-none"
-                placeholder="Start date"
               />
               <span className="text-gray-400">–</span>
               <input
@@ -189,33 +174,15 @@ export default function NewRequestsPage() {
                           </span>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="flex flex-col gap-1.5">
-                            <button
-                              onClick={() => setScreenshotUrl(p.screenshotUrl)}
-                              className="flex items-center gap-1 rounded-lg border border-indigo-300 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors"
-                            >
-                              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                              </svg>
-                              Details
-                            </button>
-                            <div className="flex gap-1">
-                              <button
-                                onClick={() => handleAction(p.id, "approved")}
-                                disabled={actionId === p.id}
-                                className="rounded-lg bg-green-500 px-2.5 py-1 text-xs font-semibold text-white hover:bg-green-600 disabled:opacity-50 transition-colors"
-                              >
-                                {actionId === p.id ? "..." : "Approve"}
-                              </button>
-                              <button
-                                onClick={() => handleAction(p.id, "rejected")}
-                                disabled={actionId === p.id}
-                                className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-semibold text-white hover:bg-red-600 disabled:opacity-50 transition-colors"
-                              >
-                                {actionId === p.id ? "..." : "Reject"}
-                              </button>
-                            </div>
-                          </div>
+                          <button
+                            onClick={() => router.push(`/admin/new-requests/${p.id}`)}
+                            className="flex items-center gap-1 rounded-lg border border-indigo-300 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors"
+                          >
+                            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            Details
+                          </button>
                         </td>
                       </tr>
                     );
@@ -298,33 +265,15 @@ export default function NewRequestsPage() {
                     {
                       label: "Action",
                       value: (
-                        <div className="flex flex-col items-end gap-1.5">
-                          <button
-                            onClick={() => setScreenshotUrl(p.screenshotUrl)}
-                            className="flex items-center gap-1 rounded-lg border border-indigo-300 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors"
-                          >
-                            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            Details
-                          </button>
-                          <div className="flex gap-1">
-                            <button
-                              onClick={() => handleAction(p.id, "approved")}
-                              disabled={actionId === p.id}
-                              className="rounded-lg bg-green-500 px-2.5 py-1 text-xs font-semibold text-white hover:bg-green-600 disabled:opacity-50 transition-colors"
-                            >
-                              {actionId === p.id ? "..." : "Approve"}
-                            </button>
-                            <button
-                              onClick={() => handleAction(p.id, "rejected")}
-                              disabled={actionId === p.id}
-                              className="rounded-lg bg-red-500 px-2.5 py-1 text-xs font-semibold text-white hover:bg-red-600 disabled:opacity-50 transition-colors"
-                            >
-                              {actionId === p.id ? "..." : "Reject"}
-                            </button>
-                          </div>
-                        </div>
+                        <button
+                          onClick={() => router.push(`/admin/new-requests/${p.id}`)}
+                          className="flex items-center gap-1 rounded-lg border border-indigo-300 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors"
+                        >
+                          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          Details
+                        </button>
                       ),
                     },
                   ].map((row, i) => (
@@ -338,10 +287,6 @@ export default function NewRequestsPage() {
             })}
           </div>
         </>
-      )}
-
-      {screenshotUrl && (
-        <ScreenshotModal url={screenshotUrl} onClose={() => setScreenshotUrl(null)} />
       )}
     </div>
   );
