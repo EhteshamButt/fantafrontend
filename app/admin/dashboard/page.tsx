@@ -122,6 +122,7 @@ export default function AdminDashboard() {
           <StatCard
             title="Manual Additions"
             value={formatRs(stats.manualAdditions)}
+            viewAllHref="/admin/manual-additions"
             todayValue={formatRs(0)}
             iconBg="bg-green-100"
             icon={

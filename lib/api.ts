@@ -188,6 +188,18 @@ export interface PaginatedPayments {
   totalPages: number;
 }
 
+export interface ManualAdditionRecord {
+  id: string;
+  trxId: string;
+  userId: string;
+  user?: { id: string; name: string; email: string };
+  type: "manual_credit" | "manual_debit";
+  amount: number;
+  postBalance: number;
+  remark: string | null;
+  createdAt: string;
+}
+
 export const adminApi = {
   getUsers: () => api("/auth/users"),
 
@@ -217,8 +229,13 @@ export const adminApi = {
   updateUserDetail: (id: string, data: { name?: string; email?: string; phone?: string; level?: number; dailyLimit?: number; referralCode?: string; walletBalance?: number }) =>
     api(`/admin/users/${id}`, { method: "PUT", body: data }),
 
-  adjustBalance: (id: string, amount: number, type: "add" | "subtract") =>
-    api(`/admin/users/${id}/balance`, { method: "PATCH", body: { amount, type } }),
+  adjustBalance: (id: string, amount: number, type: "add" | "subtract", remark?: string) =>
+    api(`/admin/users/${id}/balance`, { method: "PATCH", body: { amount, type, remark } }),
+
+  getManualAdditions: (page = 1, limit = 100) =>
+    api<{ items: ManualAdditionRecord[]; total: number; page: number; limit: number; totalPages: number }>(
+      `/admin/transactions/manual-additions?page=${page}&limit=${limit}`
+    ),
 
   banUser: (id: string, reason: string) =>
     api(`/admin/users/${id}/ban`, { method: "PATCH", body: { reason } }),
