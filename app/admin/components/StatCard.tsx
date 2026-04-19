@@ -27,21 +27,23 @@ export default function StatCard({
         large ? "col-span-full sm:col-span-1" : ""
       }`}
     >
-      {/* View All badge */}
-      {viewAllHref && (
-        <Link
-          href={viewAllHref}
-          className="absolute right-3 top-3 rounded bg-blue-100 px-2 py-0.5 text-[10px] font-semibold text-blue-600 hover:bg-blue-200 transition-colors"
-        >
-          View All
-        </Link>
-      )}
-
-      {/* Today badge */}
-      {todayValue && (
-        <span className="absolute right-3 top-3 max-w-[45%] truncate rounded bg-green-100 px-2 py-0.5 text-[10px] font-semibold text-green-700">
-          Today: {todayValue}
-        </span>
+      {/* Top-right badges — both can show together */}
+      {(viewAllHref || todayValue) && (
+        <div className="absolute right-3 top-3 flex items-center gap-1">
+          {todayValue && (
+            <span className="max-w-30 truncate rounded bg-green-100 px-2 py-0.5 text-[10px] font-semibold text-green-700">
+              Today: {todayValue}
+            </span>
+          )}
+          {viewAllHref && (
+            <Link
+              href={viewAllHref}
+              className="rounded bg-blue-100 px-2 py-0.5 text-[10px] font-semibold text-blue-600 hover:bg-blue-200 transition-colors"
+            >
+              View All
+            </Link>
+          )}
+        </div>
       )}
 
       <div className="flex items-center gap-3 sm:gap-4">
