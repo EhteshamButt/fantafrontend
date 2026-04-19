@@ -123,7 +123,6 @@ export default function AdminDashboard() {
             title="Manual Additions"
             value={formatRs(stats.manualAdditions)}
             viewAllHref="/admin/manual-additions"
-            todayValue={formatRs(0)}
             iconBg="bg-green-100"
             icon={
               <svg className="h-7 w-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
