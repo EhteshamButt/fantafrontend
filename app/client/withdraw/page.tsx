@@ -37,7 +37,7 @@ export default function WithdrawPage() {
         amount: Number(amount),
         accountName: accountName.trim(),
         accountNumber: accountNumber.trim(),
-      } as Parameters<typeof withdrawalApi.submit>[0]);
+      });
       setSuccess("Withdrawal request submitted successfully! It will be reviewed shortly.");
       setMethod("");
       setAmount("");

@@ -226,12 +226,12 @@ export default function TodayWithdrawalDetailPage() {
             <div className="divide-y divide-gray-50">
               <div className="flex items-center justify-between px-6 py-3">
                 <span className="text-sm font-medium text-gray-500">Account Name</span>
-                <span className="text-sm text-gray-800">{withdrawal.user?.name || "Unknown"}</span>
+                <span className="text-sm text-gray-800">{withdrawal.accountName || withdrawal.user?.name || "—"}</span>
               </div>
               <div className="flex items-center justify-between px-6 py-3">
                 <span className="text-sm font-medium text-gray-500">Account Number</span>
                 <span className="font-mono text-sm text-gray-800">
-                  {phone || <span className="text-gray-400 italic">Loading...</span>}
+                  {withdrawal.accountNumber || phone || "—"}
                 </span>
               </div>
             </div>

@@ -158,6 +158,8 @@ export interface WithdrawalRecord {
   method: "easypaisa" | "jazzcash";
   amount: number;
   trxId: string;
+  accountName: string | null;
+  accountNumber: string | null;
   status: "pending" | "approved" | "rejected";
   createdAt: string;
   updatedAt: string;
@@ -342,7 +344,7 @@ export const generalSettingsApi = {
 };
 
 export const withdrawalApi = {
-  submit: (data: { method: string; amount: number }) =>
+  submit: (data: { method: string; amount: number; accountName?: string; accountNumber?: string }) =>
     api("/withdrawals/submit", { method: "POST", body: data }),
 
   myWithdrawals: () => api("/withdrawals/my"),
