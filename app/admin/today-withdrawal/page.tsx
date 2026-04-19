@@ -44,7 +44,7 @@ export default function TodayWithdrawalPage() {
     adminApi
       .getTodayApprovedWithdrawals()
       .then((data) => {
-        setWithdrawals(data.filter((w) => w.status === "approved" && isToday(w.createdAt)));
+        setWithdrawals(data.filter((w) => w.status === "approved" && isToday(w.updatedAt)));
       })
       .catch((err) => {
         console.error(err);
