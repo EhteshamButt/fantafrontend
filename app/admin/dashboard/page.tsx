@@ -57,7 +57,7 @@ export default function AdminDashboard() {
         <StatCard
           title="Total Deposited"
           value={formatRs(stats.totalDeposited)}
-          viewAllHref="/admin/approved-users"
+          viewAllHref="/admin/deposit-history"
           iconBg="bg-green-100"
           icon={
             <svg className="h-7 w-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
