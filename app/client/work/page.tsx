@@ -72,31 +72,31 @@ export default function WorkPage() {
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-orange-300 border-t-orange-600" />
         </div>
       ) : (
-        <div className="rounded-2xl p-6 mb-10 shadow-2xl border-4 border-yellow-500 w-full max-w-sm mx-4 mt-4" style={{ background: "linear-gradient(to right, #4a044e, #9d174d, #991b1b)" }}>
+        <div className="rounded-2xl p-6 mb-10 shadow-2xl border-4 border-white w-full max-w-sm mx-4 mt-4" style={{ background: "linear-gradient(to right, #4a044e, #9d174d, #991b1b)" }}>
           {/* Level */}
-          <h3 className="text-3xl font-bold text-yellow-300 text-center mb-4">
+          <h3 className="text-3xl font-bold text-black text-center mb-4">
             Level {level} / 12
           </h3>
 
           {/* Referrals & Task Limit */}
           <div className="text-center text-white space-y-3 mb-5">
-            <p className="text-xl">Total Referrals: <strong className="text-yellow-400">{totalCount}</strong></p>
-            <p className="text-xl">Task Limit: <strong className="text-green-400">{user?.dailyLimit ?? 0}</strong></p>
+            <p className="text-xl">Total Referrals: <strong className="text-white">{totalCount}</strong></p>
+            <p className="text-xl">Task Limit: <strong className="text-white">{user?.dailyLimit ?? 0}</strong></p>
           </div>
 
           {/* Next Level Box */}
           {nextLevelInfo ? (
-            <div className="bg-black/70 rounded-xl p-5 border-2 border-yellow-600">
-              <p className="text-yellow-300 font-bold text-lg text-center">
+            <div className="bg-black/70 rounded-xl p-5 border-2 border-white">
+              <p className="text-black font-bold text-lg text-center">
                 Next Level {nextLevelInfo.nextLevel} → {nextLevelInfo.needed} Referrals
               </p>
-              <p className="text-center text-gray-200 mt-4">
-                Only <strong className="text-yellow-400">{nextLevelInfo.remaining}</strong> more referrals needed!
+              <p className="text-center text-white mt-4">
+                Only <strong className="text-white">{nextLevelInfo.remaining}</strong> more referrals needed!
               </p>
             </div>
           ) : (
-            <div className="bg-black/70 rounded-xl p-5 border-2 border-yellow-600 text-center">
-              <p className="text-yellow-300 font-bold text-lg">Max Level Reached!</p>
+            <div className="bg-black/70 rounded-xl p-5 border-2 border-white text-center">
+              <p className="text-black font-bold text-lg">Max Level Reached!</p>
             </div>
           )}
 
