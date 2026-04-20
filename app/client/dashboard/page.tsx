@@ -68,8 +68,10 @@ const actionCards = [
     href: "/client/contact",
     bg: "bg-orange-500",
     icon: (
-      <svg className="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-12 w-12">
+        <path d="M22 10H42V28H28L22 34V28H22V10Z" fill="#0071C5" />
+        <circle cx="16" cy="18" r="7" fill="#33B5E5" />
+        <path d="M26 40C26 34.4772 21.5228 30 16 30C10.4772 30 6 34.4772 6 40V42H26V40Z" fill="#33B5E5" />
       </svg>
     ),
   },
@@ -88,9 +90,7 @@ const actionCards = [
     href: "/client/fbr",
     bg: "bg-orange-500",
     icon: (
-      <svg className="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
+      <span style={{ display: "block", fontSize: "2rem", fontWeight: "bold" }}>FBR</span>
     ),
   },
 ];
