@@ -72,7 +72,7 @@ export default function WorkPage() {
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-orange-300 border-t-orange-600" />
         </div>
       ) : (
-        <div className="w-full max-w-sm mx-4 mt-4 rounded-2xl p-6 mb-10 shadow-2xl border-4 border-yellow-500 bg-linear-to-r from-purple-900 via-pink-800 to-red-800">
+        <div className="bg-linear-to-r from-purple-900 via-pink-800 to-red-800 rounded-2xl p-6 mb-10 shadow-2xl border-4 border-yellow-500 w-full max-w-sm mx-4 mt-4">
           {/* Level */}
           <h3 className="text-3xl font-bold text-yellow-300 text-center mb-4">
             Level {level} / 12
@@ -86,7 +86,7 @@ export default function WorkPage() {
 
           {/* Next Level Box */}
           {nextLevelInfo ? (
-            <div className="rounded-xl p-5 border-2 border-yellow-600" style={{ backgroundColor: "rgba(0,0,0,0.7)" }}>
+            <div className="bg-black/70 rounded-xl p-5 border-2 border-yellow-600">
               <p className="text-yellow-300 font-bold text-lg text-center">
                 Next Level {nextLevelInfo.nextLevel} → {nextLevelInfo.needed} Referrals
               </p>
@@ -95,7 +95,7 @@ export default function WorkPage() {
               </p>
             </div>
           ) : (
-            <div className="rounded-xl p-5 border-2 border-yellow-600 text-center" style={{ backgroundColor: "rgba(0,0,0,0.7)" }}>
+            <div className="bg-black/70 rounded-xl p-5 border-2 border-yellow-600 text-center">
               <p className="text-yellow-300 font-bold text-lg">Max Level Reached!</p>
             </div>
           )}
