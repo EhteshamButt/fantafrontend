@@ -80,8 +80,11 @@ const actionCards = [
     href: "/client/wallet",
     bg: "bg-orange-500",
     icon: (
-      <svg className="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+      <svg className="h-12 w-12 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 5C4 3.89543 4.89543 3 6 3H18C19.1046 3 20 3.89543 20 5V7H4V5Z" fill="currentColor" fillOpacity="0.2"/>
+        <path d="M20 7H4V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V7Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+        <path d="M4 7H18C19.1046 7 20 7.89543 20 9V12C20 13.1046 19.1046 14 18 14H15C13.8954 14 13 13.1046 13 12V9C13 7.89543 13.8954 7 15 7" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+        <circle cx="16.5" cy="10.5" r="1" fill="currentColor"/>
       </svg>
     ),
   },
