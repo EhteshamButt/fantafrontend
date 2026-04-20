@@ -95,8 +95,28 @@ const actionCards = [
     href: "/client/fbr",
     bg: "bg-orange-500",
     icon: (
-      <span style={{ display: "block", fontSize: "2rem", fontWeight: "bold" }}>FBR</span>
-    ),
+<span>
+  <img
+    src="https://fantaearn.com/assets/images/fbr/fbr-icon.png"
+    alt="FBR"
+    style={{ width: 48, height: 48, objectFit: "contain" }}
+    onError={(e) => {
+      e.currentTarget.style.display = "none";
+      const next = e.currentTarget.nextElementSibling as HTMLElement;
+      if (next) next.style.display = "block";
+    }}
+  />
+
+  <span
+    style={{
+      display: "none",
+      fontSize: "2rem",
+      fontWeight: "bold",
+    }}
+  >
+    FBR
+  </span>
+</span>  ),
   },
 ];
 
