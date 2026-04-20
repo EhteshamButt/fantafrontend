@@ -90,34 +90,37 @@ const actionCards = [
             </span>
     ),
   },
-  {
-    label: "FBR",
-    href: "/client/fbr",
-    bg: "bg-orange-500",
-    icon: (
-<span>
-  <img
-    src="https://fantaearn.com/assets/images/fbr/fbr-icon.png"
-    alt="FBR"
-    style={{ width: 48, height: 48, objectFit: "contain" }}
-    onError={(e) => {
-      e.currentTarget.style.display = "none";
-      const next = e.currentTarget.nextElementSibling as HTMLElement;
-      if (next) next.style.display = "block";
-    }}
-  />
+{
+  label: "FBR",
+  href: "/client/fbr",
+  bg: "bg-orange-500",
+  icon: (
+    <span style={{ color: "#fff" }}>
+      <img
+        src="https://fantaearn.com/assets/images/fbr/fbr-icon.png"
+        alt="FBR"
+        style={{ width: 48, height: 48, objectFit: "contain" }}
+        onError={(e) => {
+          e.currentTarget.style.display = "none";
 
-  <span
-    style={{
-      display: "none",
-      fontSize: "2rem",
-      fontWeight: "bold",
-    }}
-  >
-    FBR
-  </span>
-</span>  ),
-  },
+          const next = e.currentTarget.nextElementSibling as HTMLElement; // ✅ fix
+          if (next) next.style.display = "block";
+        }}
+      />
+
+      <span
+        style={{
+          display: "none",
+          fontSize: "2rem",
+          fontWeight: "bold",
+          color: "#fff",
+        }}
+      >
+        FBR
+      </span>
+    </span>
+  ),
+}
 ];
 
 export default function ClientDashboard() {
