@@ -86,7 +86,7 @@ export default function WorkPage() {
 
           {/* Next Level Box */}
           {nextLevelInfo ? (
-            <div className="bg-black/70 rounded-xl p-5 border-2 border-white">
+            <div className="rounded-xl p-5 border-2 border-white" style={{ backgroundColor: "#001f3f" }}>
               <p className="text-black font-bold text-lg text-center">
                 Next Level {nextLevelInfo.nextLevel} → {nextLevelInfo.needed} Referrals
               </p>
@@ -95,7 +95,7 @@ export default function WorkPage() {
               </p>
             </div>
           ) : (
-            <div className="bg-black/70 rounded-xl p-5 border-2 border-white text-center">
+            <div className="rounded-xl p-5 border-2 border-white text-center" style={{ backgroundColor: "#001f3f" }}>
               <p className="text-black font-bold text-lg">Max Level Reached!</p>
             </div>
           )}
