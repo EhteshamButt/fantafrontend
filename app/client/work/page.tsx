@@ -32,7 +32,7 @@ export default function WorkPage() {
   const nextLevelInfo = getNextLevelInfo(level, totalCount);
 
   return (
-    <div className="min-h-screen pb-24 flex flex-col items-center" style={{ backgroundColor: "#001f3f" }}>
+    <div className="min-h-screen pb-20 flex flex-col items-center" style={{ backgroundColor: "#001f3f" }}>
       {/* Fanta Logo */}
       <div className="flex justify-center pt-6">
            <img
