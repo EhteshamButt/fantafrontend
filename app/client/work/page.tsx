@@ -72,7 +72,7 @@ export default function WorkPage() {
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-orange-300 border-t-orange-600" />
         </div>
       ) : (
-        <div className="rounded-2xl p-6 mb-10 shadow-2xl border-4 border-white w-full max-w-sm mx-4 mt-4" style={{ background: "linear-gradient(to right, #4a044e, #9d174d, #991b1b)" }}>
+        <div className="rounded-2xl p-6 mb-10 shadow-2xl border-4 border-white w-full max-w-sm mx-4 mt-4" style={{ backgroundColor: "#001f3f" }}>
           {/* Level */}
           <h3 className="text-3xl font-bold text-black text-center mb-4">
             Level {level} / 12
