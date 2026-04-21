@@ -3,9 +3,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { withdrawalApi, authApi, clearAccessToken } from "@/lib/api";
+import { useClientUser } from "../layout";
 
 export default function WithdrawPage() {
   const router = useRouter();
+  const user = useClientUser();
+  const balance = parseFloat(String(user?.walletBalance || 0));
+
   const [step, setStep] = useState<1 | 2>(1);
   const [method, setMethod] = useState("");
   const [amount, setAmount] = useState("");
@@ -21,7 +25,6 @@ export default function WithdrawPage() {
       .then((data: unknown) => {
         const count = (data as unknown[]).length;
         setPrevCount(count);
-        // Lock first withdrawal to exactly 50
         if (count === 0) setAmount("50");
       })
       .catch(() => { setPrevCount(0); setAmount("50"); });
@@ -37,6 +40,10 @@ export default function WithdrawPage() {
     e.preventDefault();
     if (!method || !amount) return;
     const amt = Number(amount);
+    if (amt > balance) {
+      setError(`Insufficient balance. Your current balance is ${balance.toFixed(2)} Rs`);
+      return;
+    }
     if (isFirst && amt !== 50) {
       setError("First withdrawal must be exactly 50 Rs");
       return;
@@ -129,7 +136,10 @@ export default function WithdrawPage() {
             </div>
 
             <div>
-              <label className="mb-2 block text-xl font-bold text-white">Amount</label>
+              <div className="mb-2 flex items-center justify-between">
+                <label className="text-xl font-bold text-white">Amount</label>
+                <span className="text-sm text-orange-200">Balance: {balance.toFixed(2)} Rs</span>
+              </div>
               {isFirst ? (
                 /* First withdrawal: locked at 50 Rs */
                 <div className="w-full rounded-xl bg-orange-500/60 px-4 py-4 text-base font-bold text-white cursor-not-allowed">
