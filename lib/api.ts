@@ -213,6 +213,9 @@ export const adminApi = {
 
   getPendingPayments: () => api<PaymentRecord[]>("/admin/payments/pending"),
 
+  triggerCommission: (paymentId: string) =>
+    api(`/admin/payments/${paymentId}/trigger-commission`, { method: "POST" }),
+
   updatePaymentStatus: (paymentId: string, status: string) =>
     api(`/admin/payments/${paymentId}/status`, {
       method: "PATCH",

@@ -324,8 +324,23 @@ export default function PaymentDetailPage() {
                 </button>
               )}
               {payment.status === "approved" && (
-                <div className="rounded-lg bg-green-50 border border-green-200 py-2.5 text-center text-sm font-semibold text-green-600">
-                  Payment Approved
+                <div className="space-y-2">
+                  <div className="rounded-lg bg-green-50 border border-green-200 py-2.5 text-center text-sm font-semibold text-green-600">
+                    Payment Approved
+                  </div>
+                  <button
+                    onClick={async () => {
+                      try {
+                        await adminApi.triggerCommission(payment.id);
+                        alert("Commission triggered successfully!");
+                      } catch {
+                        alert("Failed to trigger commission.");
+                      }
+                    }}
+                    className="w-full rounded-lg bg-purple-600 py-2.5 text-sm font-semibold text-white hover:bg-purple-700 transition-colors"
+                  >
+                    Re-Trigger Referral Commission
+                  </button>
                 </div>
               )}
             </div>
