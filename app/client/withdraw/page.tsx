@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { withdrawalApi, authApi, clearAccessToken } from "@/lib/api";
 
@@ -14,6 +14,15 @@ export default function WithdrawPage() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+  const [prevCount, setPrevCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    withdrawalApi.myWithdrawals()
+      .then((data: unknown) => setPrevCount((data as unknown[]).length))
+      .catch(() => setPrevCount(0));
+  }, []);
+
+  const minAmount = prevCount === 0 ? 50 : 500;
 
   const handleLogout = async () => {
     try { await authApi.logout(); } finally { clearAccessToken(); router.push("/login"); }
@@ -22,6 +31,13 @@ export default function WithdrawPage() {
   const handleStepOne = (e: React.FormEvent) => {
     e.preventDefault();
     if (!method || !amount) return;
+    const amt = Number(amount);
+    if (amt < minAmount) {
+      setError(prevCount === 0
+        ? `Minimum first withdrawal is 50 Rs`
+        : `Minimum withdrawal is 500 Rs`);
+      return;
+    }
     setError("");
     setStep(2);
   };
@@ -44,6 +60,7 @@ export default function WithdrawPage() {
       setAccountName("");
       setAccountNumber("");
       setStep(1);
+      setPrevCount((c) => (c ?? 0) + 1);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to submit withdrawal");
     } finally {
@@ -111,10 +128,15 @@ export default function WithdrawPage() {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 required
-                min={1}
-                placeholder="Enter Amount..."
+                min={minAmount}
+                placeholder={`Minimum ${minAmount} Rs`}
                 className="w-full rounded-xl bg-orange-500 px-4 py-4 text-base font-medium text-white placeholder-orange-200 outline-none focus:ring-2 focus:ring-white/40"
               />
+              <p className="mt-1 text-xs text-orange-200">
+                {prevCount === 0
+                  ? "First withdrawal: minimum 50 Rs"
+                  : "Minimum withdrawal: 500 Rs"}
+              </p>
             </div>
 
             <div className="pt-2 text-center">
