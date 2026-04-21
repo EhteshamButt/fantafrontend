@@ -18,6 +18,7 @@ function timeAgo(dateStr: string) {
 interface UserDetail {
   phone: string | null;
   referredBy: string | null;
+  referredByEmail: string | null;
 }
 
 export default function PaymentDetailPage() {
@@ -36,9 +37,16 @@ export default function PaymentDetailPage() {
     if (p.userId) {
       adminApi
         .getUserDetail(p.userId)
-        .then(({ user }) =>
-          setUserDetail({ phone: user.phone, referredBy: user.referredBy })
-        )
+        .then(async ({ user }) => {
+          let referredByEmail: string | null = null;
+          if (user.referredBy) {
+            try {
+              const { user: referrer } = await adminApi.getUserDetail(user.referredBy);
+              referredByEmail = referrer.email;
+            } catch { /* ignore */ }
+          }
+          setUserDetail({ phone: user.phone, referredBy: user.referredBy, referredByEmail });
+        })
         .catch(() => {});
     }
   };
@@ -148,7 +156,17 @@ export default function PaymentDetailPage() {
 
   const detailRows = [
     { label: "Date", value: new Date(payment.createdAt).toLocaleString("en-PK", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }) },
-    { label: "Referred By", value: userDetail?.referredBy || "N/a" },
+    {
+      label: "Referred By",
+      value: userDetail?.referredBy ? (
+        <button
+          onClick={() => router.push(`/admin/users/${userDetail.referredBy}`)}
+          className="font-medium text-indigo-600 hover:underline"
+        >
+          {userDetail.referredByEmail || userDetail.referredBy}
+        </button>
+      ) : "N/a"
+    },
     { label: "Transaction Number", value: payment.trxId },
     { label: "Username", value: <span className="font-medium text-indigo-600">@{username}</span> },
     { label: "Name", value: payment.user?.name || "—" },
