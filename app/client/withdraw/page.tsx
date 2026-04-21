@@ -84,6 +84,23 @@ export default function WithdrawPage() {
 
   return (
     <div className="min-h-screen pb-24" style={{ backgroundColor: "#001f3f" }}>
+      {/* Fixed orange error banner */}
+      {error && (
+        <div className="fixed top-0 left-0 right-0 z-100 flex items-center justify-between px-4 py-3 text-sm font-semibold text-white shadow-lg" style={{ backgroundColor: "#ff6c00" }}>
+          <div className="flex items-center gap-2">
+            <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <circle cx="12" cy="12" r="10" /><line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+            </svg>
+            <span>{error}</span>
+          </div>
+          <button onClick={() => setError("")} className="ml-3 shrink-0 text-white/80 hover:text-white">
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+
       {/* Logout */}
       <button
         onClick={handleLogout}
@@ -108,13 +125,8 @@ export default function WithdrawPage() {
       <div className="mx-auto max-w-lg px-4">
         {/* Messages */}
         {success && (
-          <div className="mb-4 rounded-lg bg-green-500/20 px-4 py-3 text-center text-base font-medium text-green-400">
+          <div className="mb-4 rounded-lg px-4 py-3 text-center text-base font-medium text-white" style={{ backgroundColor: "#ff6c00" }}>
             {success}
-          </div>
-        )}
-        {error && (
-          <div className="mb-4 rounded-lg bg-red-500/20 px-4 py-3 text-center text-base font-medium text-red-400">
-            {error}
           </div>
         )}
 
