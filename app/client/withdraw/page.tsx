@@ -18,11 +18,16 @@ export default function WithdrawPage() {
 
   useEffect(() => {
     withdrawalApi.myWithdrawals()
-      .then((data: unknown) => setPrevCount((data as unknown[]).length))
-      .catch(() => setPrevCount(0));
+      .then((data: unknown) => {
+        const count = (data as unknown[]).length;
+        setPrevCount(count);
+        // Lock first withdrawal to exactly 50
+        if (count === 0) setAmount("50");
+      })
+      .catch(() => { setPrevCount(0); setAmount("50"); });
   }, []);
 
-  const minAmount = prevCount === 0 ? 50 : 500;
+  const isFirst = prevCount === 0;
 
   const handleLogout = async () => {
     try { await authApi.logout(); } finally { clearAccessToken(); router.push("/login"); }
@@ -32,10 +37,12 @@ export default function WithdrawPage() {
     e.preventDefault();
     if (!method || !amount) return;
     const amt = Number(amount);
-    if (amt < minAmount) {
-      setError(prevCount === 0
-        ? `Minimum first withdrawal is 50 Rs`
-        : `Minimum withdrawal is 500 Rs`);
+    if (isFirst && amt !== 50) {
+      setError("First withdrawal must be exactly 50 Rs");
+      return;
+    }
+    if (!isFirst && amt < 500) {
+      setError("Minimum withdrawal is 500 Rs");
       return;
     }
     setError("");
@@ -123,26 +130,31 @@ export default function WithdrawPage() {
 
             <div>
               <label className="mb-2 block text-xl font-bold text-white">Amount</label>
-              <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                required
-                min={minAmount}
-                placeholder={`Minimum ${minAmount} Rs`}
-                className="w-full rounded-xl bg-orange-500 px-4 py-4 text-base font-medium text-white placeholder-orange-200 outline-none focus:ring-2 focus:ring-white/40"
-              />
+              {isFirst ? (
+                /* First withdrawal: locked at 50 Rs */
+                <div className="w-full rounded-xl bg-orange-500/60 px-4 py-4 text-base font-bold text-white cursor-not-allowed">
+                  50 Rs
+                </div>
+              ) : (
+                <input
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  required
+                  min={500}
+                  placeholder="Minimum 500 Rs"
+                  className="w-full rounded-xl bg-orange-500 px-4 py-4 text-base font-medium text-white placeholder-orange-200 outline-none focus:ring-2 focus:ring-white/40"
+                />
+              )}
               <p className="mt-1 text-xs text-orange-200">
-                {prevCount === 0
-                  ? "First withdrawal: minimum 50 Rs"
-                  : "Minimum withdrawal: 500 Rs"}
+                {isFirst ? "First withdrawal is fixed at 50 Rs" : "Minimum withdrawal: 500 Rs"}
               </p>
             </div>
 
             <div className="pt-2 text-center">
               <button
                 type="submit"
-                disabled={!method || !amount}
+                disabled={!method || prevCount === null}
                 className="rounded-full bg-orange-500 px-12 py-3 text-base font-extrabold text-white shadow-lg transition-all hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Submit
