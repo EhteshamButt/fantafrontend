@@ -41,7 +41,7 @@ export default function WithdrawPage() {
     if (!method || !amount) return;
     const amt = Number(amount);
     if (amt > balance) {
-      setError(`Insufficient balance. Your current balance is ${balance.toFixed(2)} Rs`);
+      setError("You do not have sufficient balance for withdraw.");
       return;
     }
     if (isFirst && amt !== 50) {
