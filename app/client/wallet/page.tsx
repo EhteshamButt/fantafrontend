@@ -33,15 +33,15 @@ export default function WalletPage() {
 
   const approved = withdrawals
     .filter((w) => w.status === "approved")
-    .reduce((s, w) => s + w.amount, 0);
+    .reduce((s, w) => s + parseFloat(String(w.amount)), 0);
 
   const pending = withdrawals
     .filter((w) => w.status === "pending")
-    .reduce((s, w) => s + w.amount, 0);
+    .reduce((s, w) => s + parseFloat(String(w.amount)), 0);
 
   const rejected = withdrawals
     .filter((w) => w.status === "rejected")
-    .reduce((s, w) => s + w.amount, 0);
+    .reduce((s, w) => s + parseFloat(String(w.amount)), 0);
 
   const handleLogout = async () => {
     try {
@@ -135,7 +135,7 @@ export default function WalletPage() {
                 <div key={w.id} className="flex items-center justify-between py-4">
                   <div className="flex flex-col gap-1">
                     <span className="text-base font-bold text-white">
-                      {w.amount.toFixed(2)}
+                      {parseFloat(String(w.amount)).toFixed(2)}
                     </span>
                     <span
                       className={`inline-block rounded-full px-3 py-0.5 text-xs font-bold text-white ${badge.bg}`}
