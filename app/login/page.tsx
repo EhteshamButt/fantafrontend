@@ -79,15 +79,14 @@ function LoginForm() {
     }
   };
 
-  // Login: light gray inputs with dark text
+  // Both login and signup: orange inputs with light text
   const loginInputStyle: React.CSSProperties = {
-    backgroundColor: "#dce3ef",
-    color: "#111827",
+    background: "linear-gradient(to right, #ff6c00, #ff6c00)",
+    color: "#f3f4f6",
     border: "none",
     fontSize: "16px",
   };
 
-  // Signup: orange inputs with light text
   const signupInputStyle: React.CSSProperties = {
     background: "linear-gradient(to right, #ff6c00, #ff6c00)",
     color: "#f3f4f6",
