@@ -79,7 +79,7 @@ function LoginForm() {
     }
   };
 
-  // Login form: light gray inputs
+  // Login: light gray inputs with dark text
   const loginInputStyle: React.CSSProperties = {
     backgroundColor: "#dce3ef",
     color: "#111827",
@@ -87,15 +87,18 @@ function LoginForm() {
     fontSize: "16px",
   };
 
-  // Signup form: orange inputs with white text
+  // Signup: orange inputs with light text
   const signupInputStyle: React.CSSProperties = {
-    backgroundColor: "#f97316",
-    color: "#ffffff",
+    background: "linear-gradient(to right, #ff6c00, #ff6c00)",
+    color: "#f3f4f6",
     border: "none",
     fontSize: "16px",
   };
 
-  const inputStyle = isLogin ? loginInputStyle : signupInputStyle;
+  // Orange button style
+  const orangeBtnStyle: React.CSSProperties = {
+    background: "linear-gradient(to right, #ff6c00, #ff6c00, #ff6c00, #ff6c00, #ff6c00)",
+  };
 
   const switchForm = () => {
     setIsLogin(!isLogin);
@@ -120,21 +123,22 @@ function LoginForm() {
       <div className="flex justify-center pt-2 pb-4 sm:pt-3 sm:pb-6">
         <div className="relative w-47.5 sm:w-62.5 md:w-75 h-36 sm:h-40 md:h-44">
           <Image
-            src="https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775556882/fanta_logo_1_rchhe0.png"
+            src={isLogin
+              ? "https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775556882/fanta_logo_1_rchhe0.png"
+              : "https://res.cloudinary.com/dgmjg9zr4/image/upload/v1775666576/fatbabotle_lpufpb.png"}
             alt="Fanta ADS"
             fill
-            // className="object-contain"
             priority
           />
         </div>
       </div>
 
       {/* ── Form wrapper ── */}
-      <div className="w-full px-5 sm:px-0 sm:max-w-sm md:max-w-md">
+      <div className="px-4 py-10 w-full max-w-lg mx-auto">
 
-        <h1 className="mb-5 text-center text-2xl font-bold text-white tracking-wide">
+        <h2 className={`text-center font-bold text-white mb-8 ${isLogin ? "text-2xl" : "text-4xl"}`}>
           {isLogin ? "Login" : "Signup"}
-        </h1>
+        </h2>
 
         {error && (
           <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-400">
@@ -142,116 +146,176 @@ function LoginForm() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* ════════════════ LOGIN FORM ════════════════ */}
+        {isLogin && (
+          <form key="login" onSubmit={handleSubmit} autoComplete="on">
+            <div className="mb-6">
+              <label className="block mb-2 text-xl font-bold text-white">Username or email</label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                autoFocus
+                autoComplete="email"
+                className="login-input rounded-lg focus:ring-0 focus:border-0 border-0 block w-full p-2.5 outline-none"
+                style={loginInputStyle}
+                placeholder="Enter Your Username or email"
+              />
+            </div>
 
-          {/* ── Signup-only fields ── */}
-          {!isLogin && (
-            <>
-              <div>
-                <label className="mb-1.5 block text-sm font-bold text-white">Referral Code</label>
-                <input
-                  type="text"
-                  name="referralCode"
-                  value={form.referralCode}
-                  onChange={handleChange}
-                  readOnly={!!refCode}
-                  className="w-full rounded-lg py-3 px-4 outline-none transition placeholder-white/80"
-                  style={signupInputStyle}
-                  placeholder="Enter Referral Code here"
-                />
-                {refCode && (
-                  <p className="mt-1 flex items-center gap-1 text-xs text-green-400">
-                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            <div className="mb-6">
+              <label className="block mb-2 text-xl font-bold text-white">Password</label>
+              <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+                autoComplete="current-password"
+                className="login-input rounded-lg focus:ring-0 focus:border-0 border-0 block w-full p-2.5 outline-none"
+                style={loginInputStyle}
+                placeholder="Enter Your Password..."
+              />
+            </div>
+
+            <div className="flex items-center justify-between mt-4">
+              <button
+                type="button"
+                onClick={switchForm}
+                className="underline text-white rounded-md focus:outline-none"
+              >
+                SignUp?
+              </button>
+            </div>
+
+            <span className="flex items-center justify-center mt-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="text-white focus:outline-none font-bold rounded-full text-xl px-5 py-2.5 text-center mb-2 disabled:cursor-not-allowed disabled:opacity-50"
+                style={orangeBtnStyle}
+              >
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                     </svg>
-                    Referral code automatically applied
-                  </p>
-                )}
-              </div>
+                    Please wait...
+                  </span>
+                ) : "Login"}
+              </button>
+            </span>
+          </form>
+        )}
 
-              <div>
-                <label className="mb-1.5 block text-sm font-bold text-white">First Name</label>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={form.firstName}
-                  onChange={handleChange}
-                  required
-                  className="w-full rounded-lg py-3 px-4 outline-none transition placeholder-white/80"
-                  style={signupInputStyle}
-                  placeholder="Enter Your First Name..."
-                />
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-sm font-bold text-white">Last Name</label>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={form.lastName}
-                  onChange={handleChange}
-                  required
-                  className="w-full rounded-lg py-3 px-4 outline-none transition placeholder-white/80"
-                  style={signupInputStyle}
-                  placeholder="Enter Your Last Name..."
-                />
-              </div>
-            </>
-          )}
-
-          {/* ── Email ── */}
-          <div>
-            <label className="mb-1.5 block text-sm font-bold text-white">
-              {isLogin ? "Username or email" : "Email"}
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              className={`w-full rounded-lg py-3 px-4 outline-none transition ${!isLogin ? "placeholder-white/80" : ""}`}
-              style={inputStyle}
-              placeholder={isLogin ? "Enter your email..." : "Enter Your Email..."}
-            />
-          </div>
-
-          {/* ── Phone (signup only) ── */}
-          {!isLogin && (
+        {/* ════════════════ SIGNUP FORM ════════════════ */}
+        {!isLogin && (
+          <form key="signup" onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
             <div>
-              <label className="mb-1.5 block text-sm font-bold text-white">Phone Number</label>
+              <label className="mb-2 block text-xl font-bold text-white">
+                Referral Code <span className="text-gray-400 text-sm font-normal">(Optional)</span>
+              </label>
+              <input
+                type="text"
+                name="referralCode"
+                value={form.referralCode}
+                onChange={handleChange}
+                readOnly={!!refCode}
+                autoComplete="off"
+                className="signup-input text-gray-100 rounded-lg focus:ring-0 focus:border-0 border-0 placeholder:text-gray-100 block w-full p-2.5 outline-none"
+                style={signupInputStyle}
+                placeholder="Enter Referral Code (Optional)"
+              />
+              {refCode && (
+                <p className="mt-1 flex items-center gap-1 text-xs text-green-400">
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  Referral code automatically applied
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label className="mb-2 block text-xl font-bold text-white">First Name</label>
+              <input
+                type="text"
+                name="firstName"
+                value={form.firstName}
+                onChange={handleChange}
+                required
+                autoComplete="given-name"
+                className="signup-input text-gray-100 rounded-lg focus:ring-0 focus:border-0 border-0 placeholder:text-gray-100 block w-full p-2.5 outline-none"
+                style={signupInputStyle}
+                placeholder="Enter Your First Name..."
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-xl font-bold text-white">Last Name</label>
+              <input
+                type="text"
+                name="lastName"
+                value={form.lastName}
+                onChange={handleChange}
+                required
+                autoComplete="family-name"
+                className="signup-input text-gray-100 rounded-lg focus:ring-0 focus:border-0 border-0 placeholder:text-gray-100 block w-full p-2.5 outline-none"
+                style={signupInputStyle}
+                placeholder="Enter Your Last Name..."
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-xl font-bold text-white">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                autoComplete="new-email"
+                className="signup-input text-gray-100 rounded-lg focus:ring-0 focus:border-0 border-0 placeholder:text-gray-100 block w-full p-2.5 outline-none"
+                style={signupInputStyle}
+                placeholder="Enter Your Email..."
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-xl font-bold text-white">Phone Number</label>
               <input
                 type="tel"
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                className="w-full rounded-lg py-3 px-4 outline-none transition placeholder-white/80"
+                autoComplete="tel"
+                className="signup-input text-gray-100 rounded-lg focus:ring-0 focus:border-0 border-0 placeholder:text-gray-100 block w-full p-2.5 outline-none"
                 style={signupInputStyle}
                 placeholder="Enter Your Phone Number..."
               />
             </div>
-          )}
 
-          {/* ── Password ── */}
-          <div>
-            <label className="mb-1.5 block text-sm font-bold text-white">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-              minLength={8}
-              className={`w-full rounded-lg py-3 px-4 outline-none transition ${!isLogin ? "placeholder-white/80" : ""}`}
-              style={inputStyle}
-              placeholder={isLogin ? "Enter your password..." : "Enter Your Password..."}
-            />
-          </div>
-
-          {/* ── Confirm Password (signup only) ── */}
-          {!isLogin && (
             <div>
-              <label className="mb-1.5 block text-sm font-bold text-white">Confirm Password</label>
+              <label className="mb-2 block text-xl font-bold text-white">Password</label>
+              <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+                minLength={8}
+                autoComplete="new-password"
+                className="signup-input text-gray-100 rounded-lg focus:ring-0 focus:border-0 border-0 placeholder:text-gray-100 block w-full p-2.5 outline-none"
+                style={signupInputStyle}
+                placeholder="Enter Your Password..."
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-xl font-bold text-white">Confirm Password</label>
               <input
                 type="password"
                 name="confirmPassword"
@@ -259,24 +323,14 @@ function LoginForm() {
                 onChange={handleChange}
                 required
                 minLength={8}
-                className="w-full rounded-lg py-3 px-4 outline-none transition placeholder-white/80"
+                autoComplete="new-password"
+                className="signup-input text-gray-100 rounded-lg focus:ring-0 focus:border-0 border-0 placeholder:text-gray-100 block w-full p-2.5 outline-none"
                 style={signupInputStyle}
                 placeholder="Confirm Your Password..."
               />
             </div>
-          )}
 
-          {/* ── Toggle link ── */}
-          <div className={`pt-1 ${isLogin ? "text-left" : "text-center"}`}>
-            {isLogin ? (
-              <button
-                type="button"
-                onClick={switchForm}
-                className="text-sm text-gray-300 underline underline-offset-2 hover:text-white transition"
-              >
-                SignUp?
-              </button>
-            ) : (
+            <div className="text-center pt-1">
               <p className="text-sm text-white">
                 Back To Login{" "}
                 <button
@@ -287,30 +341,29 @@ function LoginForm() {
                   Here
                 </button>
               </p>
-            )}
-          </div>
+            </div>
 
-          {/* ── Submit Button ── */}
-          <div className="flex justify-center pt-2 pb-8">
-            <button
-              type="submit"
-              disabled={loading}
-              className="rounded-full px-16 py-3 font-semibold text-white transition hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
-              style={{ backgroundColor: "#f97316", fontSize: "15px" }}
-            >
-              {loading ? (
-                <span className="flex items-center gap-2">
-                  <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                  Please wait...
-                </span>
-              ) : isLogin ? "Login" : "Sign Up"}
-            </button>
-          </div>
+            <div className="flex justify-center pt-2 pb-8">
+              <button
+                type="submit"
+                disabled={loading}
+                className="rounded-full px-16 py-3 font-semibold text-white transition hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+                style={{ ...orangeBtnStyle, fontSize: "15px" }}
+              >
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Please wait...
+                  </span>
+                ) : "Sign Up"}
+              </button>
+            </div>
+          </form>
+        )}
 
-        </form>
       </div>
     </div>
   );

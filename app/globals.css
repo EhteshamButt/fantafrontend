@@ -24,3 +24,21 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Override browser autofill background for login inputs (gray) */
+.login-input:-webkit-autofill,
+.login-input:-webkit-autofill:hover,
+.login-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #dce3ef inset !important;
+  -webkit-text-fill-color: #111827 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Override browser autofill background for signup inputs (orange) */
+.signup-input:-webkit-autofill,
+.signup-input:-webkit-autofill:hover,
+.signup-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #ff6c00 inset !important;
+  -webkit-text-fill-color: #f3f4f6 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
